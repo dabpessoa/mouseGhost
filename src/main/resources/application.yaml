@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Mouse Ghost
+  main:
+    web-application-type=none:

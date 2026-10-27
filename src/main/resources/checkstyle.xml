@@ -1,0 +1,92 @@
+<!DOCTYPE module PUBLIC
+  "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+  "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+	<module name="LineLength">
+		<!-- Checks for long lines -->
+		<property name="severity" value="warning"/>
+		<property name="max" value="250"/>
+	</module>
+    <module name="TreeWalker">
+        <module name="AvoidStarImport">
+        	<!-- Checks that there are no import statements that use the * notation -->
+            <property name="severity" value="error"/>
+        </module>
+        <module name="WhitespaceAfter">
+        	<!-- Checks that a token is followed by whitespace -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="EmptyBlock">
+        	<!-- Checks for empty blocks -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="ConstantName">
+        	<!-- Checks that constant names conform to a specified pattern. A constant is a static and final field or an interface/annotation field -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="EmptyCatchBlock">
+        	<!-- Checks for empty catch blocks. By default, check allows empty catch block with any comment inside -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="LeftCurly">
+        	<!-- Checks for the placement of left curly braces ('{') for code blocks -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="RightCurly">
+			<!-- Checks the placement of right curly braces ('}') for code blocks -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="NeedBraces"> 
+			<!-- Checks for braces around code blocks -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="FinalClass">
+        	<!-- Ensures that identifies classes that can be effectively declared as final are explicitly marked as final -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="HideUtilityClassConstructor">
+        	<!-- Makes sure that utility classes (classes that contain only static methods or fields in their API) do not have a public constructor -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="InnerTypeLast">
+        	<!-- Checks nested (internal) classes/interfaces are declared at the bottom of the primary (top-level) class after all init and static init blocks, method, constructor and field declarations -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="InterfaceIsType">
+        	<!-- Implements Joshua Bloch, Effective Java, Item 17 - Use Interfaces only to define types -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="MutableException">
+        	<!-- Ensures that exception classes are immutable, that is, that they have only final fields. -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="AvoidNoArgumentSuperConstructorCall">
+        	<!-- Checks if call to superclass constructor without arguments is present. Such invocation is redundant because constructor body implicitly begins with a superclass constructor invocation super() -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="DeclarationOrder">
+        	<!-- Checks that the parts of a class, record, or interface declaration appear in the order suggested by the Code Conventions for the Java Programming Language. -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="EmptyStatement">
+        	<!-- Detects empty statements (standalone ";" semicolon) -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="VariableDeclarationUsageDistance">
+        	<!-- Checks the distance between declaration of variable and its first usage -->
+        	<property name="severity" value="error"/>
+        </module>
+        <module name="UnusedLocalVariable">
+        	<!-- Checks that a local variable is declared and/or assigned, but not used -->
+        	<property name="severity" value="error"/>
+    	</module>
+    	<module name="UnusedImports">
+    		<!-- Checks for unused import statements -->
+    		<property name="severity" value="error"/>
+    	</module>
+    	<module name="WhitespaceAround">
+    		<!-- Checks that a token is surrounded by whitespace -->
+    		<property name="severity" value="error"/>
+    	</module>
+    </module>
+</module>

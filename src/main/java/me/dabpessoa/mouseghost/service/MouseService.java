@@ -1,0 +1,33 @@
+package me.dabpessoa.mouseghost.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MouseService {
+
+    // Altere este valor para definir quantos segundos o mouse deve ficar parado antes de iniciar.
+    private static final long TEMPO_DE_INATIVIDADE = 5;
+
+    private final MouseMonitor mouseMonitor;
+
+    public void start() {
+        if (!mouseMonitor.isMouseGhosting()) {
+            log.info("[+] Monitor de ociosidade iniciado em plano de fundo.");
+            log.info("[+] O mouse começará a se mover após " + TEMPO_DE_INATIVIDADE + " segundos parado.");
+            log.info("[!] Para encerrar o programa totalmente, feche o console/terminal (Ctrl + C).");
+        }
+
+        mouseMonitor.startMonitor(TEMPO_DE_INATIVIDADE);
+
+        log.info("[+] Programa rodando em plano de fundo.");
+    }
+
+    public void stop() {
+        mouseMonitor.stopMonitor();
+    }
+
+}
