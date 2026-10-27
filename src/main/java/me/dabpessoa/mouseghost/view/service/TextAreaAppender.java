@@ -5,12 +5,14 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
+import lombok.Setter;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Setter
 public class TextAreaAppender extends AppenderBase<ILoggingEvent> {
 
     private static final int MAX_CHARS = 200_000;
@@ -19,12 +21,8 @@ public class TextAreaAppender extends AppenderBase<ILoggingEvent> {
     private static final Queue<String> PENDING = new ConcurrentLinkedQueue<>();
     private static final AtomicBoolean FLUSH_SCHEDULED = new AtomicBoolean(false);
 
-    private PatternLayoutEncoder encoder;
-
     // Chamado pelo Logback a partir da tag <encoder> do XML
-    public void setEncoder(PatternLayoutEncoder encoder) {
-        this.encoder = encoder;
-    }
+    private PatternLayoutEncoder encoder;
 
     /** Chame uma vez, quando a TextArea já existir */
     public static void setTextArea(TextArea area) {

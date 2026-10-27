@@ -1,0 +1,33 @@
+application:
+  version: '@project.version@'
+  artifactId: '@project.artifactId@'
+  name: '@project.name@'
+  description: '@project.description@'
+  GMT: 'GMT-3'
+
+spring:
+  application:
+    name: Mouse Ghost
+  main:
+    web-application-type=none:
+
+logging:
+  file:
+    name: ${user.dir}/logs/@project.artifactId@.log # Caminho tratado/sobrescrito no arquivo LogFileConfig.java e LogFileListener.java
+  logback:
+    rollingpolicy:
+      max-file-size: 3MB         # tamanho de cada arquivo
+      max-history: 3             # quantos períodos (dias) manter
+      total-size-cap: 8MB        # limite total; apaga os mais antigos
+      clean-history-on-start: false
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    root: INFO
+    web: INFO
+    org.springframework: INFO
+    java.sql: INFO
+    org.hibernate: INFO
+    org.mybatis: INFO
+    me.dabpessoa: INFO

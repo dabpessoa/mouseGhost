@@ -52,7 +52,9 @@ hs_err_pid*
 ### BlueJ files ###
 *.ctxt
 
-### Log file ###
+### Logs ###
+/log
+/logs
 *.log
 
 ### Compiled class file ###

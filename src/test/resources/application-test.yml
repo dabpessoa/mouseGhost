@@ -1,0 +1,13 @@
+logging:
+  level:
+    root: INFO
+    web: INFO
+    org.springframework: INFO
+    java.sql: INFO
+    org.hibernate: INFO
+    org.mybatis: INFO
+    me.dabpessoa: INFO
+
+spring:
+  main:
+    allow-bean-definition-overriding: true

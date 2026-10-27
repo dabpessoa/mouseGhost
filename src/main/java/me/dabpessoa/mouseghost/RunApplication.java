@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public final class RunApplication {
 
     private RunApplication() {
-        // Private Constructor.
+        // Do nothing. Construtor protegido para evitar instanciação de classe utilitária.
     }
 
     static void main(String[] args) {

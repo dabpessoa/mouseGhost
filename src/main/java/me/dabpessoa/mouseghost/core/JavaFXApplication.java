@@ -6,9 +6,12 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.RunApplication;
+import me.dabpessoa.mouseghost.config.LogFileSpringListener;
 import me.dabpessoa.mouseghost.view.scene.MainViewScene;
+import me.dabpessoa.mouseghost.view.service.TextAreaLogConfig;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 @Slf4j
 public class JavaFXApplication extends Application {
@@ -36,6 +39,7 @@ public class JavaFXApplication extends Application {
     @Override
     public void stop() {
         log.info("Encerrando aplicação...");
+        TextAreaLogConfig.unregister();
         stopSpring();
         Platform.exit();
         System.exit(0);
@@ -46,8 +50,12 @@ public class JavaFXApplication extends Application {
         String[] args = getParameters().getRaw().toArray(new String[0]);
         this.springContext = new SpringApplicationBuilder()
                 .sources(RunApplication.class)
+                .listeners(new LogFileSpringListener())
                 .headless(false)
                 .run(args);
+
+        String loggingFilePath = springContext.getBean(Environment.class).getProperty("logging.file.name");
+        log.info("Log em arquivo: {}", loggingFilePath);
     }
 
     private void stopSpring() {
