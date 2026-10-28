@@ -2,6 +2,7 @@ package me.dabpessoa.mouseghost.view.stage;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import me.dabpessoa.mouseghost.utils.AppIcons;
 import me.dabpessoa.mouseghost.view.generic.AbstractView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class SobreStage extends AbstractView {
 
     @Override
     public void config(Stage stage) {
+        AppIcons.aplicar(stage);
         stage.setTitle("Sobre");
         stage.setWidth(600);
         stage.setHeight(700);

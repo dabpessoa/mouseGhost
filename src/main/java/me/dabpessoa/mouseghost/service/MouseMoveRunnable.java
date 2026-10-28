@@ -40,7 +40,8 @@ public class MouseMoveRunnable implements Runnable {
                 // Se a posição mudou, o usuário mexeu o mouse fisicamente
                 if (!mouseMoveDto.getPosicaoAtualReal().equals(mouseMoveDto.getUltimaPosicaoSalva())) {
                     if (mouseMoveDto.isModoBotAtivo()) {
-                        log.info("\n[!] Movimento humano detectado! Interrompendo o bot e reiniciando cronômetro.");
+                        log.info("-> Movimento humano detectado! Interrompendo o bot e reiniciando cronômetro.");
+                        log.info("");
                         mouseMoveDto.setModoBotAtivo(false);
                     }
                     // Atualiza o marcador de tempo para agora
@@ -54,7 +55,7 @@ public class MouseMoveRunnable implements Runnable {
                 // Se o tempo parado exceder o limite, o robô assume o controle.
                 if (tempoParado >= limiteMilissegundos) {
                     if (!mouseMoveDto.isModoBotAtivo()) {
-                        log.info("\n[->] Computador ocioso por {}s. Iniciando movimentos orgânicos...", mouseMoveDto.getTempoDeInatividade());
+                        log.info("-> Computador ocioso por {}s. Iniciando movimentos orgânicos.", mouseMoveDto.getTempoDeInatividade());
                         mouseMoveDto.setModoBotAtivo(true);
                     }
 
@@ -82,7 +83,6 @@ public class MouseMoveRunnable implements Runnable {
                         // Se o movimento foi interrompido, reseta os tempos para o ciclo humano voltar
                         mouseMoveDto.setTempoUltimoMovimentoHumano(System.currentTimeMillis());
                         mouseMoveDto.setUltimaPosicaoSalva(MouseInfo.getPointerInfo().getLocation());
-                        mouseMoveDto.setModoBotAtivo(false);
                     }
                 } else {
                     // Se ainda não deu o tempo de ociosidade, apenas aguarda um curto período antes de checar de novo

@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public final class LogFileUtils {
 
     private LogFileUtils() {
-        // Private Constructor
+        // Do nothing. Construtor protegido para evitar instanciação de classe utilitária.
     }
 
     public static String calcularCaminhoDeArquivoDeLog(String appName, String appId) {

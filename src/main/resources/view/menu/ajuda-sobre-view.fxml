@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sobre-scroll" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.SobreViewController">
    <content>
@@ -40,9 +41,9 @@
                         </VBox>
                         <VBox spacing="15.0" styleClass="opcao, opcao-cafe" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label styleClass="opcao-titulo" text="Buy Me a Coffee (Internacional / Cartão)" />
+                              <Label styleClass="opcao-titulo" text="Compre um Café pra mim! (Cartão / Nacional / Internacional)" />
                               <Label styleClass="texto" text="Prefere apoiar com cartão de crédito ou PayPal? Clique no botão abaixo:" wrapText="true" />
-                              <Button fx:id="cafeButton" mnemonicParsing="false" onAction="#abrirBuyMeACoffee" styleClass="botao-cafe" text="☕ Buy Me a Coffee" />
+                              <Button fx:id="cafeButton" mnemonicParsing="false" onAction="#abrirBuyMeACoffee" styleClass="botao-cafe" text="☕ Doar um Café!" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="20.0" />
@@ -50,13 +51,13 @@
                         </VBox>
                         <VBox spacing="15.0" styleClass="opcao, opcao-pix" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label styleClass="opcao-titulo" text="⚡ Pix (Brasil / Rápido)" />
+                              <Label styleClass="opcao-titulo" text="⚡ Pix (Rápido)" />
                               <Label styleClass="texto" text="Doe qualquer valor via Pix de forma instantânea:" wrapText="true" />
                               <HBox spacing="16.0">
                                  <children>
-                                    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="156.0" prefWidth="156.0" styleClass="qr-box">
+                                    <StackPane fx:id="qrStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="156.0" prefWidth="156.0" styleClass="qr-box">
                                        <children>
-                                          <ImageView fx:id="qrImageView" fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
+                                          <SVGPath fx:id="qrSvgPath" fill="#000000"/>
                                           <Label fx:id="qrPlaceholder" styleClass="qr-placeholder" text="QR Code do Pix" textAlignment="CENTER" wrapText="true" />
                                        </children>
                                     </StackPane>

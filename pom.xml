@@ -86,6 +86,12 @@
 			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.5.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -192,6 +198,7 @@
 						<nonFilteredFileExtension>jpg</nonFilteredFileExtension>
 						<nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
 						<nonFilteredFileExtension>png</nonFilteredFileExtension>
+						<nonFilteredFileExtension>svg</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
 				</configuration>
 				<executions>
@@ -303,7 +310,7 @@
 									<mainJar>${project.build.finalName}.jar</mainJar>
 									<mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
 									<winConsole>false</winConsole>
-									<!-- <icon>${project.basedir}/src/main/resources/icone.ico</icon> -->
+									<icon>${project.basedir}/src/main/resources/images/icons/mouseghost.ico</icon>
 								</configuration>
 							</execution>
 						</executions>

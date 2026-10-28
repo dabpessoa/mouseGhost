@@ -28,7 +28,11 @@ public class InicioViewController {
 
     @FXML
     protected void onStartButtonClick() {
-        log.info("Botão de start clicado...");
+        log.info("(*) Botão de início clicado.");
+
+        TextAreaLogConfig.register();
+        TextAreaAppender.setTextArea(consoleTextArea);
+
         mouseService.start();
 
         startButton.setDisable(true);
@@ -37,7 +41,7 @@ public class InicioViewController {
 
     @FXML
     protected void onStopButtonClick() {
-        log.info("Botão de stop clicado...");
+        log.info("(*) Botão de Parar clicado.");
         mouseService.stop();
 
         startButton.setDisable(false);
@@ -51,9 +55,6 @@ public class InicioViewController {
 
         consoleTextArea.setEditable(false); // Impede que o usuário digite no log
         consoleTextArea.setWrapText(true);   // Quebra as linhas longas automaticamente.
-
-        TextAreaLogConfig.register();
-        TextAreaAppender.setTextArea(consoleTextArea);
     }
 
 }

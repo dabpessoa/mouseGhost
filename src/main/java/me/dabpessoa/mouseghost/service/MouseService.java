@@ -16,14 +16,15 @@ public class MouseService {
 
     public void start() {
         if (!mouseMonitor.isMouseGhosting()) {
-            log.info("[+] Monitor de ociosidade iniciado em plano de fundo.");
+            log.info("----------======== Mouse Ghosting ========----------");
+            log.info("[+] Monitor de ociosidade iniciado com sucesso.");
             log.info("[+] O mouse começará a se mover após " + TEMPO_DE_INATIVIDADE + " segundos parado.");
-            log.info("[!] Para encerrar o programa totalmente, feche o console/terminal (Ctrl + C).");
+            log.info("[!] Para encerrar o monitoramento, clique no botão 'Parar', ou feche a janela principal.");
+            log.info("----------======== ************** ========----------");
+            log.info("");
         }
 
         mouseMonitor.startMonitor(TEMPO_DE_INATIVIDADE);
-
-        log.info("[+] Programa rodando em plano de fundo.");
     }
 
     public void stop() {
