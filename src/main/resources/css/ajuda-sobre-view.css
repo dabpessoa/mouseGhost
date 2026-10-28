@@ -1,0 +1,155 @@
+/* ==========================================================
+   Tela "Sobre" (apoio ao projeto)
+   Paleta:
+     fundo   #F6F7FB   tinta  #1F2340   apoio  #5C6280
+     linha   #DDE0EC   café   #FFDD00   pix    #0F8B7E
+   ========================================================== */
+
+/* ---------- Estrutura ---------- */
+
+* {
+    -fx-font-family: "Segoe UI", "System";
+}
+
+#panelTitle {
+    -fx-padding: 0 0 0 0;
+    -fx-font-family: "Segoe UI", "System";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+#bodyPanel {
+    -fx-border-color: lightgray;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-color: #fcfcfc;
+    -fx-padding: 10 10 10 10;
+}
+
+.sobre-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+/* ---------- Textos ---------- */
+
+.texto-destaque {
+    -fx-font-size: 15px;
+    -fx-text-fill: #1F2340;
+    -fx-line-spacing: 3;
+}
+
+.subtitulo {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5C6280;
+    -fx-padding: 4 0 10 0;
+}
+
+.opcao-titulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2340;
+}
+
+.texto {
+    -fx-text-fill: #3E4466;
+    -fx-line-spacing: 2;
+}
+
+.rotulo {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5C6280;
+}
+
+/* ---------- Blocos de doação ----------
+   A faixa lateral de cada bloco repete a cor do botão dele. */
+
+.opcao {
+    -fx-background-color: white;
+    -fx-padding: 16 18 18 18;
+    -fx-border-width: 1 1 1 4;
+}
+
+.opcao-cafe {
+    -fx-border-color: #DDE0EC #DDE0EC #DDE0EC #FFDD00;
+}
+
+.opcao-pix {
+    -fx-border-color: #DDE0EC #DDE0EC #DDE0EC #0F8B7E;
+}
+
+/* ---------- Botões ---------- */
+
+.botao-cafe,
+.botao-pix {
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 9 20 9 20;
+    -fx-cursor: hand;
+}
+
+.botao-cafe {
+    -fx-background-color: #FFDD00;
+    -fx-text-fill: #1F2340;
+}
+
+.botao-cafe:hover   { -fx-background-color: #F2CF00; }
+.botao-cafe:pressed { -fx-background-color: #DDBB00; }
+
+.botao-pix {
+    -fx-background-color: #0F8B7E;
+    -fx-text-fill: white;
+}
+
+.botao-pix:hover   { -fx-background-color: #0C7469; }
+.botao-pix:pressed { -fx-background-color: #095E55; }
+
+/* Foco do teclado continua visível */
+.botao-cafe:focused,
+.botao-pix:focused {
+    -fx-border-color: #1F2340;
+    -fx-border-width: 2;
+}
+
+/* ---------- QR Code e código Pix ---------- */
+
+.qr-box {
+    -fx-background-color: white;
+    -fx-border-color: #DDE0EC;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+}
+
+.qr-placeholder {
+    -fx-text-fill: #5C6280;
+    -fx-font-size: 12px;
+}
+
+.pix-codigo {
+    -fx-control-inner-background: #F6F7FB;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #1F2340;
+    -fx-focus-color: #0F8B7E;
+    -fx-faint-focus-color: transparent;
+}
+
+/* ---------- Rodapé ---------- */
+
+.rodape {
+    -fx-border-color: #DDE0EC transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 16 0 0 0;
+}
+
+.agradecimento {
+    -fx-text-fill: #5C6280;
+    -fx-line-spacing: 2;
+}

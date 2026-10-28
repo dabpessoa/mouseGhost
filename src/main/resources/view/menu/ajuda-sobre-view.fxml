@@ -1,10 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25">
-   <children>
-      <Label layoutX="216.0" layoutY="51.0" text="Desenvolvido por Diego Pessoa" />
-   </children>
-</AnchorPane>
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sobre-scroll" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.SobreViewController">
+   <content>
+      <VBox>
+         <children>
+            <VBox fx:id="panelTitle" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Obrigado!" VBox.vgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="3.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </VBox>
+            <StackPane VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox fx:id="bodyPanel" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="texto-destaque" text="Se este app poupa seu tempo e evita bloqueios incômodos, considere apoiar o projeto com um café ou um Pix voluntário! Assim conseguimos manter o app 100% gratuito." wrapText="true" />
+                              <Separator styleClass="separator" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="15.0" top="10.0" />
+                                 </VBox.margin>
+                              </Separator>
+                              <Label styleClass="subtitulo" text="Escolha uma opção de doação abaixo:" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="15.0" styleClass="opcao, opcao-cafe" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="opcao-titulo" text="Buy Me a Coffee (Internacional / Cartão)" />
+                              <Label styleClass="texto" text="Prefere apoiar com cartão de crédito ou PayPal? Clique no botão abaixo:" wrapText="true" />
+                              <Button fx:id="cafeButton" mnemonicParsing="false" onAction="#abrirBuyMeACoffee" styleClass="botao-cafe" text="☕ Buy Me a Coffee" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox spacing="15.0" styleClass="opcao, opcao-pix" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="opcao-titulo" text="⚡ Pix (Brasil / Rápido)" />
+                              <Label styleClass="texto" text="Doe qualquer valor via Pix de forma instantânea:" wrapText="true" />
+                              <HBox spacing="16.0">
+                                 <children>
+                                    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="156.0" prefWidth="156.0" styleClass="qr-box">
+                                       <children>
+                                          <ImageView fx:id="qrImageView" fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Label fx:id="qrPlaceholder" styleClass="qr-placeholder" text="QR Code do Pix" textAlignment="CENTER" wrapText="true" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label styleClass="rotulo" text="Pix Copia e Cola" />
+                                          <TextArea fx:id="pixCodeArea" editable="false" prefRowCount="4" styleClass="pix-codigo" wrapText="true" />
+                                          <Button fx:id="copiarPixButton" mnemonicParsing="false" onAction="#copiarCodigoPix" styleClass="botao-pix" text="Copiar Código Pix" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox styleClass="rodape" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="agradecimento" text="Obrigado por apoiar! Sua doação ajuda a cobrir custos de desenvolvimento e mantém o app livre de anúncios." wrapText="true" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </VBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
