@@ -1,4 +1,4 @@
-package me.dabpessoa.mouseghost.view.service;
+package me.dabpessoa.mouseghost.utils.textarea;
 
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;

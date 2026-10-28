@@ -1,20 +1,20 @@
-package me.dabpessoa.mouseghost.view.scene;
+package me.dabpessoa.mouseghost.view.stage;
 
 import javafx.stage.Stage;
-import me.dabpessoa.mouseghost.view.scene.generic.AbstractViewScene;
+import me.dabpessoa.mouseghost.view.generic.AbstractView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MainViewScene extends AbstractViewScene {
+public class MainStage extends AbstractView {
 
     private static final String VIEW_PATH = "/view/main/main-view.fxml";
 
     @Value("${spring.application.name}")
     private String title;
 
-    public MainViewScene(ApplicationContext springContext) {
+    public MainStage(ApplicationContext springContext) {
         super(VIEW_PATH, springContext);
     }
 

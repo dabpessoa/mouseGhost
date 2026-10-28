@@ -1,4 +1,4 @@
-package me.dabpessoa.mouseghost.view.service;
+package me.dabpessoa.mouseghost.utils.textarea;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;

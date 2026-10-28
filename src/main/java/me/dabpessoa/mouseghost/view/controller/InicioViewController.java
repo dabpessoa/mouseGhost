@@ -6,14 +6,14 @@ import javafx.scene.control.TextArea;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.service.MouseService;
-import me.dabpessoa.mouseghost.view.service.TextAreaAppender;
-import me.dabpessoa.mouseghost.view.service.TextAreaLogConfig;
+import me.dabpessoa.mouseghost.utils.textarea.TextAreaAppender;
+import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MainViewController {
+public class InicioViewController {
 
     private final MouseService mouseService;
 
@@ -51,12 +51,9 @@ public class MainViewController {
 
         consoleTextArea.setEditable(false); // Impede que o usuário digite no log
         consoleTextArea.setWrapText(true);   // Quebra as linhas longas automaticamente.
-        redirecionarConsole(consoleTextArea);
-    }
 
-    private void redirecionarConsole(TextArea textArea) {
         TextAreaLogConfig.register();
-        TextAreaAppender.setTextArea(textArea);
+        TextAreaAppender.setTextArea(consoleTextArea);
     }
 
 }

@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.RunApplication;
 import me.dabpessoa.mouseghost.config.LogFileSpringListener;
-import me.dabpessoa.mouseghost.view.scene.MainViewScene;
-import me.dabpessoa.mouseghost.view.service.TextAreaLogConfig;
+import me.dabpessoa.mouseghost.view.stage.MainStage;
+import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
@@ -19,13 +19,14 @@ public class JavaFXApplication extends Application {
     @Getter
     private static Stage principalStage;
 
-    private ConfigurableApplicationContext springContext;
+    @Getter
+    private static ConfigurableApplicationContext springContext;
 
     @Override
     public void start(Stage stage) {
         principalStage = stage;
 
-        MainViewScene principalScene = springContext.getBean(MainViewScene.class);
+        MainStage principalScene = springContext.getBean(MainStage.class);
         principalScene.init(stage);
     }
 
@@ -38,6 +39,10 @@ public class JavaFXApplication extends Application {
     // Quando a janela fecha, o JavaFX chama o método stop()
     @Override
     public void stop() {
+        stopApplication();
+    }
+
+    public static void stopApplication() {
         log.info("Encerrando aplicação...");
         TextAreaLogConfig.unregister();
         stopSpring();
@@ -48,7 +53,7 @@ public class JavaFXApplication extends Application {
     private void initSpring() {
         // Inicializa o contexto do Spring Boot sem abrir um servidor Web (ótimo para Desktop)
         String[] args = getParameters().getRaw().toArray(new String[0]);
-        this.springContext = new SpringApplicationBuilder()
+        springContext = new SpringApplicationBuilder()
                 .sources(RunApplication.class)
                 .listeners(new LogFileSpringListener())
                 .headless(false)
@@ -58,9 +63,9 @@ public class JavaFXApplication extends Application {
         log.info("Log em arquivo: {}", loggingFilePath);
     }
 
-    private void stopSpring() {
+    private static void stopSpring() {
         // Fecha o contexto do Spring para encerrar conexões com banco de dados, threads, etc.
-        this.springContext.close();
+        springContext.close();
     }
 
 }

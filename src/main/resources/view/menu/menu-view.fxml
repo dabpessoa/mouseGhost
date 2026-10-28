@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<MenuBar xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.MenuViewController">
+    <menus>
+        <Menu mnemonicParsing="false" text="Ações">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#abrirAcoesInicio" text="Início" />
+                <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Configurações">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#abrirConfiguracoesPadroes" text="Configurações Padrões" />
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Ajuda">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#abrirAjudaDicas" text="Dicas" />
+                <MenuItem mnemonicParsing="false" onAction="#abrirAjudaSobre" text="Sobre" />
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>
