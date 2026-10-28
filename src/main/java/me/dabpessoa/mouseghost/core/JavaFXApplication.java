@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.RunApplication;
 import me.dabpessoa.mouseghost.config.LogFileSpringListener;
+import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import me.dabpessoa.mouseghost.utils.AppIcons;
 import me.dabpessoa.mouseghost.view.stage.MainStage;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
@@ -53,6 +54,9 @@ public class JavaFXApplication extends Application {
     }
 
     private void initSpring() {
+        // Garantindo a existência do arquivo de configurações e seus valores.
+        SettingsFileUtils.garantirArquivoPadrao();
+
         // Inicializa o contexto do Spring Boot sem abrir um servidor Web (ótimo para Desktop)
         String[] args = getParameters().getRaw().toArray(new String[0]);
         springContext = new SpringApplicationBuilder()

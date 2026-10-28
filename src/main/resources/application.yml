@@ -8,6 +8,8 @@ application:
 spring:
   application:
     name: Mouse Ghost
+  config:
+    import: optional:file:${APPDATA:${user.home}}/MouseGhost/settings.properties
   main:
     web-application-type=none:
 
@@ -31,3 +33,8 @@ logging:
     org.hibernate: INFO
     org.mybatis: INFO
     me.dabpessoa: INFO
+
+# Valores são importados através da propriedade "spring.config.import".
+app:
+  config:
+    ociosidade.segundos: ${ociosidade.segundos:#{null}}
