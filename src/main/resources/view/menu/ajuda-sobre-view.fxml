@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sobre-scroll" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.SobreViewController">
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sobre-scroll" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.SobreViewController">
    <content>
       <VBox>
          <children>

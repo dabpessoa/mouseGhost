@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="65.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
+<AnchorPane prefHeight="65.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
     <children>
         <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="botao" text="Iniciar" AnchorPane.leftAnchor="15.0" />
         <Button fx:id="stopButton" layoutX="88.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="botao" text="Parar" AnchorPane.leftAnchor="88.0" />

@@ -1,12 +1,11 @@
 /* GERAL */
 * {
-    -fx-font-family: "Segoe UI", "System";
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif, "System";
 }
 
 /* PAINÉIS */
 #panelTitle {
     -fx-padding: 0 0 0 0;
-    -fx-font-family: "Segoe UI", "System";
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }

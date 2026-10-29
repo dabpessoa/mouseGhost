@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="360.0" prefWidth="610.0" styleClass="root-panel" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
+<VBox prefHeight="360.0" prefWidth="610.0" styleClass="root-panel" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
    <children>
       <VBox fx:id="panelTitle">
          <children>
