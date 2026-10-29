@@ -1,4 +1,4 @@
-package me.dabpessoa.mouseghost.view.stage;
+package me.dabpessoa.mouseghost.view.views;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -6,9 +6,6 @@ import me.dabpessoa.mouseghost.utils.AppIcons;
 import me.dabpessoa.mouseghost.view.generic.AbstractView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-import javax.swing.text.html.CSS;
-import java.util.Objects;
 
 @Component
 public class SobreView extends AbstractView {

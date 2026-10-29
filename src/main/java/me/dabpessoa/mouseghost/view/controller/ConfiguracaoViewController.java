@@ -1,13 +1,11 @@
 package me.dabpessoa.mouseghost.view.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.service.MouseService;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
-import me.dabpessoa.mouseghost.view.stage.MainView;
 import org.springframework.stereotype.Component;
 
 @Slf4j

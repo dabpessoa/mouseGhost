@@ -1,4 +1,4 @@
-package me.dabpessoa.mouseghost.view.stage;
+package me.dabpessoa.mouseghost.view.views;
 
 import javafx.stage.Stage;
 import me.dabpessoa.mouseghost.view.generic.AbstractView;

@@ -9,7 +9,7 @@ import me.dabpessoa.mouseghost.RunApplication;
 import me.dabpessoa.mouseghost.config.LogFileSpringListener;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import me.dabpessoa.mouseghost.utils.AppIcons;
-import me.dabpessoa.mouseghost.view.stage.MainView;
+import me.dabpessoa.mouseghost.view.views.MainView;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
