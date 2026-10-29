@@ -3,6 +3,10 @@
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif, "System";
 }
 
+.titulo {
+    -fx-text-fill: #2A277A;
+}
+
 /* PAINÉIS */
 #panelTitle {
     -fx-padding: 0 0 0 0;

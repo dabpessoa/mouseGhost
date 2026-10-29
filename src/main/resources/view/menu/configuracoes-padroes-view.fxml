@@ -12,7 +12,7 @@
    <children>
       <VBox fx:id="panelTitle">
          <children>
-            <Label text="Configurações Básicas" VBox.vgrow="ALWAYS" />
+            <Label styleClass="titulo" text="Configurações Básicas" VBox.vgrow="ALWAYS" />
          </children>
          <VBox.margin>
             <Insets bottom="3.0" left="10.0" right="10.0" top="10.0" />
