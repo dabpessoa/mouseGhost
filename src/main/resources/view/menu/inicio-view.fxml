@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="65.0" prefWidth="298.0"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="65.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
     <children>
-        <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" text="Iniciar" AnchorPane.leftAnchor="15.0" />
-        <Button fx:id="stopButton" layoutX="71.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" text="Parar" AnchorPane.leftAnchor="75.0" />
-        <Button fx:id="bandejaButton" layoutX="140.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" text="Ocultar Janela" AnchorPane.leftAnchor="135.0" />
+        <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="botao" text="Iniciar" AnchorPane.leftAnchor="15.0" />
+        <Button fx:id="stopButton" layoutX="88.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="botao" text="Parar" AnchorPane.leftAnchor="88.0" />
+        <Button fx:id="bandejaButton" layoutX="171.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" styleClass="botao" text="Ocultar Janela" AnchorPane.leftAnchor="171.0" />
+
+        <Button fx:id="doarCafeButton" mnemonicParsing="false" onAction="#onDoarCafeClick"
+                prefHeight="25.0" styleClass="botao-doar-cafe" text="Doar um Café"
+                AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="13.0">
+            <graphic>
+                <SVGPath styleClass="icone-cafe"
+                         content="M1.5 5 H11 V10 C11 12.5 9 14.5 6.5 14.5 H6 C3.5 14.5 1.5 12.5 1.5 10 Z M11 6.8 H12.2 C13.8 6.8 15 8 15 9.6 C15 11.2 13.8 12.4 12.2 12.4 H10.6 V11 H12.2 C13 11 13.6 10.4 13.6 9.6 C13.6 8.8 13 8.2 12.2 8.2 H11 Z" />
+            </graphic>
+        </Button>
+
         <Separator layoutX="15.0" layoutY="51.0" prefHeight="4.0" prefWidth="582.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
         <TextArea fx:id="consoleTextArea" layoutX="14.0" layoutY="65.0" prefHeight="253.0" prefWidth="581.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0" />
+      <Separator layoutX="155.0" layoutY="13.0" orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" />
     </children>
 </AnchorPane>

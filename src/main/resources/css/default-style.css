@@ -1,7 +1,9 @@
+/* GERAL */
 * {
     -fx-font-family: "Segoe UI", "System";
 }
 
+/* PAINÉIS */
 #panelTitle {
     -fx-padding: 0 0 0 0;
     -fx-font-family: "Segoe UI", "System";
@@ -24,3 +26,31 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
+
+/* BOTÕES */
+.botao {
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10 5 10;
+    -fx-cursor: hand;
+    -fx-background-color: #2A277A;
+    -fx-text-fill: #e3e3e3;
+}
+
+.botao:hover {
+    -fx-background-color: #433ca6;
+}
+
+.botao:pressed {
+    -fx-background-color: #100a5e;
+}
+
+.botao:focused {
+    -fx-border-color: #6e6e6e;
+    -fx-border-width: 1;
+}
+
+

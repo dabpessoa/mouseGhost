@@ -32,7 +32,6 @@ public class MenuViewController {
 
     @FXML
     protected void abrirConfiguracoesPadroes() {
-        mainView.setStyleSheet("/css/default-pane.css");
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/configuracoes-padroes-view.fxml");
 
         menuItemConfiguracoes.setDisable(true);
@@ -54,7 +53,6 @@ public class MenuViewController {
 
     @FXML
     protected void abrirAcoesInicio() {
-        mainView.clearStyleSheets();
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/inicio-view.fxml");
 
         menuItemInicio.setDisable(true);
