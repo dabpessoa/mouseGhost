@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.dabpessoa.mouseghost.core.JavaFXApplication;
 import me.dabpessoa.mouseghost.service.MouseService;
 import me.dabpessoa.mouseghost.service.TrayService;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaAppender;
