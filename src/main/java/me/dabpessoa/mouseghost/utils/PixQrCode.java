@@ -91,7 +91,7 @@ public final class PixQrCode {
      */
     static void main(String[] args) throws IOException {
         String pixCopiaECola = "00020101021126330014br.gov.bcb.pix0111017792113765204000053039865802BR5925DIEGO AUGUSTO BEZERRA PES6009SAO PAULO622905251M61DJD8W126RJ510EWWNSVK06304F58D";
-        Path destino = Path.of("pix-qrcode.svg");
+        Path destino = Path.of("/images/pix-qrcode.svg");
 
         salvarSvg(pixCopiaECola, destino);
         System.out.println("Arquivo gerado: " + destino.toAbsolutePath());

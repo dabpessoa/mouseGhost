@@ -9,8 +9,8 @@
 <AnchorPane prefHeight="65.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
     <children>
         <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="botao" text="Iniciar" AnchorPane.leftAnchor="15.0" />
-        <Button fx:id="stopButton" layoutX="88.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="botao" text="Parar" AnchorPane.leftAnchor="88.0" />
-        <Button fx:id="bandejaButton" layoutX="171.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" styleClass="botao" text="Ocultar Janela" AnchorPane.leftAnchor="171.0" />
+        <Button fx:id="stopButton" layoutX="88.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="botao, btn-1" text="Parar" AnchorPane.leftAnchor="88.0" />
+        <Button fx:id="bandejaButton" layoutX="171.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" styleClass="botao, btn-1" text="Ocultar Janela" AnchorPane.leftAnchor="171.0" />
 
         <Button fx:id="doarCafeButton" mnemonicParsing="false" onAction="#onDoarCafeClick"
                 prefHeight="25.0" styleClass="botao-doar-cafe" text="Doar um Café"

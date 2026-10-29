@@ -26,7 +26,10 @@
     -fx-padding: 0;
 }
 
-/* BOTÕES */
+/*
+ * BOTÕES
+ * MouseGhost - Design System de Botões
+ */
 .botao {
     -fx-background-insets: 0;
     -fx-background-radius: 6;
@@ -37,6 +40,8 @@
     -fx-cursor: hand;
     -fx-background-color: #2A277A;
     -fx-text-fill: #e3e3e3;
+    -fx-border-color: #2A277A;
+    -fx-border-width: 1;
 }
 
 .botao:hover {
@@ -48,8 +53,83 @@
 }
 
 .botao:focused {
-    -fx-border-color: #6e6e6e;
-    -fx-border-width: 1;
+    -fx-border-color: #d1d1d1;
+    -fx-padding: 4 9 4 9;
+    -fx-border-width: 2;
 }
 
+.botao.btn-1 {
+    -fx-background-color: #F1EEFF;
+    -fx-text-fill: #2A277A;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: #D5CEFF;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+}
+
+.botao.btn-1:hover {
+    -fx-background-color: #E4DEFF;
+    -fx-border-color: #A99BFF;
+}
+
+.botao.btn-1:pressed {
+    -fx-background-color: #D5CCFF;
+}
+
+.botao.btn-1:focused {
+    -fx-border-color: #625AD0;
+    -fx-border-width: 2px;
+    -fx-padding: 4 9 4 9;
+}
+
+.botao.btn-1:disabled {
+    -fx-background-color: #F0EFF5;
+    -fx-text-fill: #89869A;
+    -fx-border-color: #E0DEE8;
+    -fx-opacity: 1.0;
+    -fx-cursor: default;
+}
+
+.botao.btn-2 {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2A277A;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: #2A277A;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+}
+
+.botao.btn-2:hover {
+    -fx-background-color: #2A277A;
+    -fx-border-color: #2A277A;
+    -fx-text-fill: white;
+}
+
+.botao.btn-2:pressed {
+    -fx-background-color: #D5CCFF;
+}
+
+.botao.btn-2:focused {
+    -fx-border-color: #625AD0;
+    -fx-border-width: 2px;
+    -fx-padding: 4 9 4 9;
+}
+
+.botao.btn-2:disabled {
+    -fx-background-color: #F0EFF5;
+    -fx-text-fill: #89869A;
+    -fx-border-color: #E0DEE8;
+    -fx-opacity: 1.0;
+    -fx-cursor: default;
+}
 
