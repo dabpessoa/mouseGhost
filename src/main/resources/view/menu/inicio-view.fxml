@@ -10,6 +10,7 @@
     <children>
         <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" text="Iniciar" AnchorPane.leftAnchor="15.0" />
         <Button fx:id="stopButton" layoutX="71.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" text="Parar" AnchorPane.leftAnchor="75.0" />
+        <Button fx:id="bandejaButton" layoutX="140.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" text="Ocultar Janela" AnchorPane.leftAnchor="135.0" />
         <Separator layoutX="15.0" layoutY="51.0" prefHeight="4.0" prefWidth="582.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
         <TextArea fx:id="consoleTextArea" layoutX="14.0" layoutY="65.0" prefHeight="253.0" prefWidth="581.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0" />
     </children>

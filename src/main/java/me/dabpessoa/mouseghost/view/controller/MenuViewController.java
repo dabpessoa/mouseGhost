@@ -2,10 +2,12 @@ package me.dabpessoa.mouseghost.view.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.core.JavaFXApplication;
+import me.dabpessoa.mouseghost.utils.DicasAlert;
 import me.dabpessoa.mouseghost.view.views.MainView;
 import me.dabpessoa.mouseghost.view.views.SobreView;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,19 +25,23 @@ public class MenuViewController {
     private String versao;
 
     @FXML
+    private MenuItem menuItemConfiguracoes;
+
+    @FXML
+    private MenuItem menuItemInicio;
+
+    @FXML
     protected void abrirConfiguracoesPadroes() {
         mainView.setStyleSheet("/css/default-pane.css");
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/configuracoes-padroes-view.fxml");
+
+        menuItemConfiguracoes.setDisable(true);
+        menuItemInicio.setDisable(false);
     }
 
     @FXML
     protected void abrirAjudaDicas() {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Dicas");
-        alerta.setHeaderText("Mouse Ghost");
-        alerta.setContentText("Versão " + versao);
-        alerta.initOwner(JavaFXApplication.getPrincipalStage());
-        alerta.showAndWait();
+        DicasAlert.criar(versao, JavaFXApplication.getPrincipalStage()).showAndWait();
     }
 
     @FXML
@@ -50,11 +56,27 @@ public class MenuViewController {
     protected void abrirAcoesInicio() {
         mainView.clearStyleSheets();
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/inicio-view.fxml");
+
+        menuItemInicio.setDisable(true);
+        menuItemConfiguracoes.setDisable(false);
     }
 
     @FXML
     protected void sairAction() {
         JavaFXApplication.stopApplication();
+    }
+
+    @FXML
+    public void initialize() {
+        menuItemInicio.setDisable(true);
+    }
+
+    public void monitoramentoIniciado() {
+        menuItemConfiguracoes.setDisable(true);
+    }
+
+    public void monitoramentoParado() {
+        menuItemConfiguracoes.setDisable(false);
     }
 
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.service.MouseService;
+import me.dabpessoa.mouseghost.service.TrayService;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaAppender;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,17 @@ import org.springframework.stereotype.Component;
 public class InicioViewController {
 
     private final MouseService mouseService;
+    private final MenuViewController menuViewController;
+    private final TrayService trayService;
 
     @FXML
     private Button startButton;
 
     @FXML
     private Button stopButton;
+
+    @FXML
+    private Button bandejaButton;
 
     @FXML
     private TextArea consoleTextArea;
@@ -37,6 +43,9 @@ public class InicioViewController {
 
         startButton.setDisable(true);
         stopButton.setDisable(false);
+        bandejaButton.setDisable(false);
+
+        menuViewController.monitoramentoIniciado();
     }
 
     @FXML
@@ -46,12 +55,21 @@ public class InicioViewController {
 
         startButton.setDisable(false);
         stopButton.setDisable(true);
+        bandejaButton.setDisable(true);
+
+        menuViewController.monitoramentoParado();
+    }
+
+    @FXML
+    public void onEsconderNaBandejaClick() {
+        trayService.esconderNaBandeja();
     }
 
     @FXML
     public void initialize() {
         startButton.setDisable(false);
         stopButton.setDisable(true);
+        bandejaButton.setDisable(true);
 
         consoleTextArea.setEditable(false); // Impede que o usuário digite no log
         consoleTextArea.setWrapText(true);   // Quebra as linhas longas automaticamente.

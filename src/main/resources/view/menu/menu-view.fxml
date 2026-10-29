@@ -7,13 +7,13 @@
     <menus>
         <Menu mnemonicParsing="false" text="Ações">
             <items>
-                <MenuItem mnemonicParsing="false" onAction="#abrirAcoesInicio" text="Início" />
+                <MenuItem fx:id="menuItemInicio" mnemonicParsing="false" onAction="#abrirAcoesInicio" text="Início" />
                 <MenuItem mnemonicParsing="false" onAction="#sairAction" text="Sair" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Configurações">
             <items>
-                <MenuItem mnemonicParsing="false" onAction="#abrirConfiguracoesPadroes" text="Configurações Padrões" />
+                <MenuItem fx:id="menuItemConfiguracoes" mnemonicParsing="false" onAction="#abrirConfiguracoesPadroes" text="Configurações Padrões" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Ajuda">
