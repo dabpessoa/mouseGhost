@@ -1,0 +1,26 @@
+* {
+    -fx-font-family: "Segoe UI", "System";
+}
+
+#panelTitle {
+    -fx-padding: 0 0 0 0;
+    -fx-font-family: "Segoe UI", "System";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+#bodyPanel {
+    -fx-border-color: lightgray;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-color: #fcfcfc;
+    -fx-padding: 10 10 10 10;
+}
+
+.root-panel {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}

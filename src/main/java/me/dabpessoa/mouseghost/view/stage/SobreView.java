@@ -7,15 +7,16 @@ import me.dabpessoa.mouseghost.view.generic.AbstractView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.CSS;
 import java.util.Objects;
 
 @Component
-public class SobreStage extends AbstractView {
+public class SobreView extends AbstractView {
 
     private static final String VIEW_PATH = "/view/menu/ajuda-sobre-view.fxml";
     private static final String CSS_PATH = "/css/ajuda-sobre-view.css";
 
-    public SobreStage(ApplicationContext springContext) {
+    public SobreView(ApplicationContext springContext) {
         super(VIEW_PATH, springContext);
     }
 
@@ -27,7 +28,7 @@ public class SobreStage extends AbstractView {
         stage.setHeight(700);
         stage.setResizable(false);
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource(CSS_PATH), "CSS não encontrado: " + CSS_PATH).toExternalForm());
+        setStyleSheet(CSS_PATH);
         stage.centerOnScreen();
     }
 

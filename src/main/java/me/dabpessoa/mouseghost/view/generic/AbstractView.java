@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationContext;
 
+import java.util.Objects;
+
 @Getter
 public abstract class AbstractView implements IViewLoader {
 
@@ -82,6 +84,31 @@ public abstract class AbstractView implements IViewLoader {
         stage.setScene(new Scene(loadFXML()));
         stage.setMaximized(false);
         stage.centerOnScreen();
+    }
+
+    public void setStyleSheet(String cssPath) {
+        if (getStage() == null || getStage().getScene() == null || getStage().getScene().getStylesheets() == null) {
+            return;
+        }
+
+        clearStyleSheets();
+        addStyleSheet(cssPath);
+    }
+
+    public void addStyleSheet(String cssPath) {
+        if (getStage() == null || getStage().getScene() == null || getStage().getScene().getStylesheets() == null) {
+            return;
+        }
+
+        getStage().getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource(cssPath), "CSS não encontrado: " + cssPath).toExternalForm());
+    }
+
+    public void clearStyleSheets() {
+        if (getStage() == null || getStage().getScene() == null) {
+            return;
+        }
+
+        getStage().getScene().getStylesheets().clear();
     }
 
     @Override

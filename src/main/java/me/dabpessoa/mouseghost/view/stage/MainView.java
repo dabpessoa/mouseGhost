@@ -7,14 +7,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MainStage extends AbstractView {
+public class MainView extends AbstractView {
 
     private static final String VIEW_PATH = "/view/main/main-view.fxml";
 
     @Value("${spring.application.name}")
     private String title;
 
-    public MainStage(ApplicationContext springContext) {
+    public MainView(ApplicationContext springContext) {
         super(VIEW_PATH, springContext);
     }
 

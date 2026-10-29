@@ -1,12 +1,3 @@
-/* ==========================================================
-   Tela "Sobre" (apoio ao projeto)
-   Paleta:
-     fundo   #F6F7FB   tinta  #1F2340   apoio  #5C6280
-     linha   #DDE0EC   café   #FFDD00   pix    #0F8B7E
-   ========================================================== */
-
-/* ---------- Estrutura ---------- */
-
 * {
     -fx-font-family: "Segoe UI", "System";
 }

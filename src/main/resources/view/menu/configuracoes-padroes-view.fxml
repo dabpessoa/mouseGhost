@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25">
+<VBox prefHeight="360.0" prefWidth="610.0" styleClass="root-panel" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
    <children>
-      <AnchorPane VBox.vgrow="ALWAYS">
+      <VBox fx:id="panelTitle">
          <children>
-            <Label layoutX="27.0" layoutY="13.0" text="Configurações Padrões" />
-            <Button layoutX="542.0" layoutY="365.0" mnemonicParsing="false" text="Salvar" />
-            <Pane layoutX="135.0" layoutY="115.0" prefHeight="200.0" prefWidth="394.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
-               <children>
-                  <Label layoutX="14.0" layoutY="18.0" text="Tempo de Ociosidade: " />
-                  <TextField layoutX="152.0" layoutY="14.0" />
-               </children>
-            </Pane>
+            <Label text="Configurações Básicas" VBox.vgrow="ALWAYS" />
          </children>
-      </AnchorPane>
+         <VBox.margin>
+            <Insets bottom="3.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </VBox>
+      <StackPane VBox.vgrow="ALWAYS">
+         <children>
+            <VBox fx:id="bodyPanel" VBox.vgrow="ALWAYS">
+               <children>
+                  <AnchorPane VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label layoutY="4.0" text="Tempo de Ociosidade:" />
+                        <TextField fx:id="tempoOciosidadeInput" layoutX="127.0" />
+                        <Button layoutX="416.0" layoutY="253.0" mnemonicParsing="false" onAction="#salvarAction" text="Salvar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0" />
+                        <Button layoutX="481.0" layoutY="253.0" mnemonicParsing="false" onAction="#voltarInicioAction" text="Voltar para Início" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
+               </StackPane.margin>
+            </VBox>
+         </children>
+      </StackPane>
    </children>
 </VBox>

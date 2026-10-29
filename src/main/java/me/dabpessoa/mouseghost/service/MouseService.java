@@ -1,6 +1,8 @@
 package me.dabpessoa.mouseghost.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class MouseService {
     private final MouseMonitor mouseMonitor;
 
+    @Getter @Setter
     @Value("${app.config.ociosidade.segundos}")
     private String tempoDeInatividade;
 

@@ -9,7 +9,7 @@ import me.dabpessoa.mouseghost.RunApplication;
 import me.dabpessoa.mouseghost.config.LogFileSpringListener;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import me.dabpessoa.mouseghost.utils.AppIcons;
-import me.dabpessoa.mouseghost.view.stage.MainStage;
+import me.dabpessoa.mouseghost.view.stage.MainView;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,7 +29,7 @@ public class JavaFXApplication extends Application {
         principalStage = stage;
         AppIcons.aplicar(stage);
 
-        MainStage principalScene = springContext.getBean(MainStage.class);
+        MainView principalScene = springContext.getBean(MainView.class);
         principalScene.init(stage);
     }
 

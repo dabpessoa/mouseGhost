@@ -6,8 +6,8 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.core.JavaFXApplication;
-import me.dabpessoa.mouseghost.view.stage.MainStage;
-import me.dabpessoa.mouseghost.view.stage.SobreStage;
+import me.dabpessoa.mouseghost.view.stage.MainView;
+import me.dabpessoa.mouseghost.view.stage.SobreView;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -15,12 +15,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MenuViewController {
 
-    private final MainStage mainStage;
-    private final SobreStage sobreStage;
+    private final MainView mainView;
+    private final SobreView sobreView;
 
     @FXML
     protected void abrirConfiguracoesPadroes() {
-        mainStage.navigateTo("#conteudoPrincipal", "/view/menu/configuracoes-padroes-view.fxml");
+        mainView.setStyleSheet("/css/default-pane.css");
+        mainView.navigateTo("#conteudoPrincipal", "/view/menu/configuracoes-padroes-view.fxml");
     }
 
     @FXML
@@ -38,12 +39,13 @@ public class MenuViewController {
         Stage stage = new Stage();
         stage.initOwner(JavaFXApplication.getPrincipalStage());   // a janela principal
 
-        sobreStage.init(stage);
+        sobreView.init(stage);
     }
 
     @FXML
     protected void abrirAcoesInicio() {
-        mainStage.navigateTo("#conteudoPrincipal", "/view/menu/inicio-view.fxml");
+        mainView.clearStyleSheets();
+        mainView.navigateTo("#conteudoPrincipal", "/view/menu/inicio-view.fxml");
     }
 
     @FXML
