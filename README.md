@@ -1,19 +1,15 @@
-# Getting Started
+Stack: Java 25 + Spring Boot 4.0.5 + JavaFX 25 + AWT Robot + Maven.
 
-### Reference Documentation
-For further reference, please consider the following sections:
+Descrição: Aplicação desktop que detecta ociosidade e realiza movimentos de mouse orgânicos (curvas de Bézier + smoothstep) para manter sessões ativas.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/4.0.5/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/4.0.5/maven-plugin/build-image.html)
 
-### Maven Parent overrides
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
-
+Camada -> Componentes Principais -> Observação
+Bootstrap -> RunApplication e JavaFXApplication -> Spring Boot iniciado dentro do ciclo de vida do JavaFX
+Serviço de domínio -> MouseService, MouseMonitor, MouseMoveRunnable -> Lógica de ociosidade + movimento
+UI -> Controllers FXML + AbstractView / MainView -> Navegação por troca de conteúdo em Pane
+Persistência de config -> SettingsFileUtils + spring.config.import -> Arquivo em %APPDATA%/MouseGhost/settings.properties
+Infra -> Tray, logging em TextArea + arquivo, ícones -> Bem implementado
 
 
 jpackage --type app-image --name MeuApp --input input --main-jar mouseghost-1.0.0.jar --main-class org.springframework.boot.loader.launch.JarLauncher --dest dist

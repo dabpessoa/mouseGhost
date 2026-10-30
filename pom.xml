@@ -246,7 +246,7 @@
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>0.0.8</version>
 				<configuration>
-					<mainClass>me.dabpessa.sockettransfer.core.JavaFXApplication</mainClass>
+					<mainClass>me.dabpessoa.sockettransfer.core.JavaFXApplication</mainClass>
 					<options>
 						<option>--enable-native-access=javafx.graphics</option>
 					</options>
@@ -256,7 +256,7 @@
 						<!-- Default configuration for running with: mvn clean javafx:run -->
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>me.dabpessa.mouseghost/me.dabpessa.mouseghost.core.JavaFXApplication
+							<mainClass>me.dabpessoa.mouseghost/me.dabpessoa.mouseghost.core.JavaFXApplication
 							</mainClass>
 							<launcher>app</launcher>
 							<jlinkZipName>app</jlinkZipName>

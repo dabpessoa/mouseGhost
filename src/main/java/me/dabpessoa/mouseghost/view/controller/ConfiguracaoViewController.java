@@ -21,10 +21,10 @@ public class ConfiguracaoViewController {
 
     @FXML
     protected void salvarAction() {
-        String tempoOciosidade = tempoOciosidadeInput.getText();
-        SettingsFileUtils.atualizarArquivoDePropriedades(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempoOciosidade);
+        Long tempoOciosidade = mouseService.verificarTempoInatividade(tempoOciosidadeInput.getText());
+        SettingsFileUtils.atualizarArquivoDePropriedades(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempoOciosidade + "");
 
-        mouseService.setTempoDeInatividade(tempoOciosidade);
+        mouseService.setTempoDeInatividade(tempoOciosidade + "");
         log.info("Tempo de ociosidade alterado para " + tempoOciosidade + " segundos.");
     }
 
