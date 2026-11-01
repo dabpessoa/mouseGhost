@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu App JavaFX - Gerenciador de Tarefas</title>
+    <!-- Fonte moderna do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.85rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-download:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        main {
+            flex: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            width: 100%;
+        }
+
+        .screenshot-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 3rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .screenshot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nome do Seu App</h1>
+        <p class="subtitle">Um aplicativo desktop robusto e moderno desenvolvido em JavaFX, Spring Boot e Maven.</p>
+        
+        <!-- Link dinâmico para a última versão lançada no GitHub Releases -->
+        <a href="https://github.com/SEU_USUARIO/SEU_REPO/releases/latest/download/app-windows.zip" class="btn-download">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Baixar para Windows (.zip)
+        </a>
+    </header>
+
+    <main>
+        <!-- Espaço para a imagem/print da interface do JavaFX -->
+        <div class="screenshot-container">
+            <!-- Substitua "screenshot.png" pelo nome da imagem real que você colocar no repositório -->
+            <img src="screenshot.png" alt="Interface do Aplicativo JavaFX">
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>⚡ Alta Performance</h3>
+                <p>Estruturado com Spring Boot no backend garantindo estabilidade e processamento rápido.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎨 Interface Moderna</h3>
+                <p>Construído em JavaFX com foco em usabilidade, design limpo e responsivo.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔄 Atualizações Automáticas</h3>
+                <p>Empacotado e distribuído de forma automatizada direto pelas ferramentas do GitHub.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Seu Nome / Seu Projeto. Hospedado com GitHub Pages.</p>
+    </footer>
+
+</body>
+</html>
