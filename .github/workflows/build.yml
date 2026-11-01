@@ -1,0 +1,33 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Dispara o build automaticamente sempre que você criar uma tag como v1.0.0
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Copiar código do repositório
+      uses: actions/checkout@v4
+
+    - name: Configurar JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '25'
+
+    - name: Executar Build com Maven
+      run: mvn clean package -Pwin-exe
+
+    - name: Compactar pasta de saída
+      run: Compress-Archive -Path "caminho/para/sua-pasta/*" -DestinationPath "mouseghost-windows.zip"
+
+    - name: Criar Release no GitHub
+      uses: softprops/action-gh-release@v1
+      with:
+        files: mouseghost-windows.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
