@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 public class MainView extends AbstractView {
 
     private static final String VIEW_PATH = "/view/main/main-view.fxml";
+    private static final String DEFAULT_CSS_PATH = "/css/default-style.css";
+    private static final String DOAR_CAFE_BOTAO_CSS = "/css/botao-doar-cafe.css";
 
     @Value("${spring.application.name}")
     private String title;
@@ -24,6 +26,9 @@ public class MainView extends AbstractView {
         stage.setWidth(610);
         stage.setHeight(360);
         stage.centerOnScreen();
+
+        setStyleSheet(DEFAULT_CSS_PATH);
+        addStyleSheet(DOAR_CAFE_BOTAO_CSS);
     }
 
 }

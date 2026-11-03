@@ -30,6 +30,9 @@ public class InicioViewController {
     private Button bandejaButton;
 
     @FXML
+    private Button doarCafeButton;
+
+    @FXML
     private TextArea consoleTextArea;
 
     @FXML
@@ -63,6 +66,11 @@ public class InicioViewController {
     @FXML
     public void onEsconderNaBandejaClick() {
         trayService.esconderNaBandeja();
+    }
+
+    @FXML
+    public void onDoarCafeClick() {
+        menuViewController.abrirAjudaSobre();
     }
 
     @FXML

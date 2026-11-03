@@ -1,20 +1,20 @@
 package me.dabpessoa.mouseghost.service;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import me.dabpessoa.mouseghost.model.MouseMoveDto;
 
 import java.awt.MouseInfo;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class MouseMoveRunnable implements Runnable {
 
     private static final Integer SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS = 1500;
 
-    @Getter @Setter
-    private volatile boolean running;
+    private final AtomicBoolean running;
+    private volatile Thread workerThread;
 
     private final MouseMonitor mouseMonitor;
     private final Random random;
@@ -25,15 +25,19 @@ public class MouseMoveRunnable implements Runnable {
     public MouseMoveRunnable(MouseMonitor mouseMonitor) {
         this.mouseMonitor = mouseMonitor;
         this.random = new Random();
+
+        this.running = new AtomicBoolean(false);
         mouseMoveDto = new MouseMoveDto(true);
     }
 
     @Override
     public void run() {
-        this.running = true;
+        workerThread = Thread.currentThread();
+        running.set(true);
 
-        while (running && !Thread.currentThread().isInterrupted()) {
-            try {
+        try {
+            while (isRunning() && !Thread.currentThread().isInterrupted()) {
+
                 // Captura a posição real atual do mouse na tela
                 mouseMoveDto.setPosicaoAtualReal(MouseInfo.getPointerInfo().getLocation());
 
@@ -88,18 +92,25 @@ public class MouseMoveRunnable implements Runnable {
                     // Se ainda não deu o tempo de ociosidade, apenas aguarda um curto período antes de checar de novo
                     Thread.sleep(SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS);
                 }
-
-            } catch (InterruptedException e) {
-                // É fundamental restaurar o status de interrupção
-                Thread.currentThread().interrupt();
-                break; // Encerra o loop de forma segura
             }
+        } catch (InterruptedException e) {
+            // É fundamental restaurar o status de interrupção
+            Thread.currentThread().interrupt();
+        } finally {
+            running.set(false);
         }
     }
 
     public void stop() {
-        setRunning(false);
-        Thread.currentThread().interrupt();
+        running.set(false);
+        if (workerThread != null) {
+            workerThread.interrupt();
+            workerThread = null;
+        }
+    }
+
+    public boolean isRunning() {
+        return running.get();
     }
 
 }

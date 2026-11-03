@@ -11,7 +11,7 @@ spring:
   config:
     import: optional:file:${APPDATA:${user.home}}/MouseGhost/settings.properties
   main:
-    web-application-type=none:
+    web-application-type: none
 
 logging:
   file:

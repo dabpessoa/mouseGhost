@@ -1,0 +1,46 @@
+/* ==========================================================
+   Botão "Doar um Café" (tela inicial)
+   Estilo "suave": fundo âmbar claro, borda fina e texto marrom.
+   Visível sem competir com os botões principais; no hover,
+   ganha o tom do amarelo de "Buy Me a Coffee".
+   Paleta:  fundo #FFF6D8   borda #EBD48A   texto #6B4A00   ícone #8A5A00
+   ========================================================== */
+
+.botao-doar-cafe {
+    -fx-background-color: #FFF6D8;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14;
+    -fx-border-color: #EBD48A;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-text-fill: #6B4A00;
+    -fx-font-family: "Segoe UI", "System";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 14 5 12;
+    -fx-graphic-text-gap: 7;
+    -fx-cursor: hand;
+}
+
+.botao-doar-cafe:hover {
+    -fx-background-color: #FFEDA8;
+    -fx-border-color: #E2C25E;
+}
+
+.botao-doar-cafe:pressed {
+    -fx-background-color: #FFE285;
+}
+
+/* Foco do teclado visível, sem alterar o tamanho do botão */
+.botao-doar-cafe:focused {
+    -fx-effect: dropshadow(gaussian, rgba(166, 124, 0, 0.40), 6, 0, 0, 0);
+}
+
+/* Ícone da xícara (SVGPath no graphic do botão) */
+.botao-doar-cafe .icone-cafe {
+    -fx-fill: #8A5A00;
+}
+
+.botao-doar-cafe:hover .icone-cafe {
+    -fx-fill: #6B4A00;
+}

@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="360.0" prefWidth="610.0" styleClass="root-panel" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
+<VBox prefHeight="360.0" prefWidth="610.0" styleClass="root-panel" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
    <children>
       <VBox fx:id="panelTitle">
          <children>
-            <Label text="Configurações Básicas" VBox.vgrow="ALWAYS" />
+            <Label styleClass="titulo" text="Configurações Básicas" VBox.vgrow="ALWAYS" />
          </children>
          <VBox.margin>
             <Insets bottom="3.0" left="10.0" right="10.0" top="10.0" />
@@ -26,8 +26,8 @@
                      <children>
                         <Label layoutY="4.0" text="Tempo de Ociosidade:" />
                         <TextField fx:id="tempoOciosidadeInput" layoutX="127.0" />
-                        <Button layoutX="416.0" layoutY="253.0" mnemonicParsing="false" onAction="#salvarAction" text="Salvar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="120.0" />
-                        <Button layoutX="481.0" layoutY="253.0" mnemonicParsing="false" onAction="#voltarInicioAction" text="Voltar para Início" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" />
+                        <Button layoutX="356.0" layoutY="256.0" mnemonicParsing="false" onAction="#salvarAction" styleClass="botao" text="Salvar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="151.0" />
+                        <Button layoutX="481.0" layoutY="253.0" mnemonicParsing="false" onAction="#voltarInicioAction" styleClass="botao, btn-1" text="Voltar para Início" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </children>

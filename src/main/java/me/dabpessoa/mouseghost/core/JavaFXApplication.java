@@ -29,8 +29,8 @@ public class JavaFXApplication extends Application {
         principalStage = stage;
         AppIcons.aplicar(stage);
 
-        MainView principalScene = springContext.getBean(MainView.class);
-        principalScene.init(stage);
+        MainView mainView = springContext.getBean(MainView.class);
+        mainView.init(stage);
     }
 
     // O JavaFX chama o método init() primeiro (Thread de Inicialização)

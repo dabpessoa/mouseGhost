@@ -1,7 +1,6 @@
 package me.dabpessoa.mouseghost.view.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ public class MenuViewController {
 
     @FXML
     protected void abrirConfiguracoesPadroes() {
-        mainView.setStyleSheet("/css/default-pane.css");
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/configuracoes-padroes-view.fxml");
 
         menuItemConfiguracoes.setDisable(true);
@@ -54,7 +52,6 @@ public class MenuViewController {
 
     @FXML
     protected void abrirAcoesInicio() {
-        mainView.clearStyleSheets();
         mainView.navigateTo("#conteudoPrincipal", "/view/menu/inicio-view.fxml");
 
         menuItemInicio.setDisable(true);

@@ -1,5 +1,8 @@
 package me.dabpessoa.mouseghost.service;
 
+import jakarta.annotation.PreDestroy;
+import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.awt.Robot;
@@ -8,6 +11,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class MouseMonitor {
@@ -17,26 +22,34 @@ public class MouseMonitor {
 
     private final Random random;
     private final Robot robot;
+    private final ExecutorService executor;
     private final MouseMoveRunnable mouseMoveRunnable;
 
+    @Value("${application.artifactId}")
+    private String appId;
+
     public MouseMonitor() throws AWTException {
-        random = new Random();
-        robot = new Robot();
-        mouseMoveRunnable = new MouseMoveRunnable(this);
+        this.random = new Random();
+        this.robot = new Robot();
+        this.mouseMoveRunnable = new MouseMoveRunnable(this);
+        this.executor = Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, appId + "-monitor-thread");
+            t.setDaemon(true);
+            return t;
+        });
     }
 
-    public void startMonitor(long tempoDeInatividade) {
+    public void startMonitor(long tempoDeInatividadeSegundos) {
         if (isMouseGhosting()) {
             return;
         }
 
-        if (tempoDeInatividade != 0) {
-            mouseMoveRunnable.getMouseMoveDto().setTempoDeInatividade(tempoDeInatividade);
+        if (tempoDeInatividadeSegundos <= 0) {
+            tempoDeInatividadeSegundos = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
         }
 
-        Thread thread = new Thread(mouseMoveRunnable);
-        thread.setDaemon(true);
-        thread.start();
+        mouseMoveRunnable.getMouseMoveDto().setTempoDeInatividade(tempoDeInatividadeSegundos);
+        executor.submit(mouseMoveRunnable);
     }
 
     public void stopMonitor() {
@@ -87,6 +100,11 @@ public class MouseMonitor {
         }
 
         return true;
+    }
+
+    @PreDestroy
+    public synchronized void destroy() {
+        this.executor.shutdown();
     }
 
 }
