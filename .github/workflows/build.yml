@@ -26,37 +26,59 @@ jobs:
     - name: Executar Build com Maven (win-exe)
       run: mvn clean package -Pwin-exe
 
-    - name: Compactar pasta de saída
+    - name: Preparar artefatos
       shell: pwsh
       run: |
-        $source = "./target/win-exe-dist"
-        if (-not (Test-Path $source)) {
-          Write-Error "Pasta de saída não encontrada: $source"
-          Get-ChildItem target -ErrorAction SilentlyContinue
+        $winSource = "./target/win-exe-dist"
+        $jarSource = "./target"
+          
+        if (-not (Test-Path $winSource)) {
+          Write-Error "Pasta de saída do jpackage não encontrada: $winSource"
           exit 1
         }
 
-        $appDir = Get-ChildItem "$source" -Directory | Select-Object -First 1
-
+        $appDir = Get-ChildItem $winSource -Directory | Select-Object -First 1
         if ($null -eq $appDir) {
-          Write-Error "Nenhuma pasta de aplicativo encontrada dentro de $source"
-          Get-ChildItem $source
+          Write-Error "Nenhuma pasta de aplicativo encontrada dentro de $winSource"
           exit 1
         }
 
-        Write-Host "Compactando: $($appDir.FullName)"
-        $zipName = "mouseghost-windows-${{ github.ref_name }}.zip"
+        # Nome dos artefatos com a versão da tag
+        $version = "${{ github.ref_name }}"
+        $zipName = "mouseghost-windows-$version.zip"
+        $jarName = "mouseghost-$version.jar"
 
+        Write-Host "Compactando aplicativo Windows: $($appDir.FullName)"
         Compress-Archive -Path "$($appDir.FullName)/*" `
-                           -DestinationPath $zipName `
-                           -Force
-        
-        Get-Item $zipName | Format-List Name, Length, LastWriteTime
+                         -DestinationPath $zipName `
+                         -Force
 
-    - name: Criar Release no GitHub
+        # Pega o JAR principal do Spring Boot (ignora .original, sources, javadoc e plain)
+        $jar = Get-ChildItem $jarSource -Filter "*.jar" |
+               Where-Object {
+                 $_.Name -notlike "*.jar.original" -and
+                 $_.Name -notlike "*sources*" -and
+                 $_.Name -notlike "*javadoc*" -and
+                 $_.Name -notlike "*-plain.jar"
+               } |
+               Select-Object -First 1
+
+        if ($null -eq $jar) {
+          Write-Error "JAR não encontrado em $jarSource"
+          exit 1
+        }
+
+        Copy-Item $jar.FullName -Destination $jarName -Force
+
+        Write-Host "`nArtefatos gerados:"
+        Get-Item $zipName, $jarName | Format-Table Name, Length, LastWriteTime -AutoSize
+
+    - name: Criar GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: mouseghost-windows-*.zip
+        files: |
+          mouseghost-windows-*.zip
+          mouseghost-*.jar
         generate_release_notes: true
         fail_on_unmatched_files: true
       env:
