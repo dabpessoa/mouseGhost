@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*' # Dispara o build automaticamente sempre que você criar uma tag como v1.0.0
 
+permissions:
+  contents: write   # necessário para criar a Release
+
 jobs:
   build:
     runs-on: windows-latest
@@ -18,16 +21,43 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '25'
+        cache: 'maven' # cache das dependências
 
-    - name: Executar Build com Maven
+    - name: Executar Build com Maven (win-exe)
       run: mvn clean package -Pwin-exe
 
     - name: Compactar pasta de saída
-      run: Compress-Archive -Path "caminho/para/sua-pasta/*" -DestinationPath "mouseghost-windows.zip"
+      shell: pwsh
+      run: |
+        $source = "./target/win-exe-dist"
+        if (-not (Test-Path $source)) {
+          Write-Error "Pasta de saída não encontrada: $source"
+          Get-ChildItem target -ErrorAction SilentlyContinue
+          exit 1
+        }
+
+        $appDir = Get-ChildItem "$source" -Directory | Select-Object -First 1
+
+        if ($null -eq $appDir) {
+          Write-Error "Nenhuma pasta de aplicativo encontrada dentro de $source"
+          Get-ChildItem $source
+          exit 1
+        }
+
+        Write-Host "Compactando: $($appDir.FullName)"
+        $zipName = "mouseghost-windows-${{ github.ref_name }}.zip"
+
+        Compress-Archive -Path "$($appDir.FullName)/*" `
+                           -DestinationPath $zipName `
+                           -Force
+        
+        Get-Item $zipName | Format-List Name, Length, LastWriteTime
 
     - name: Criar Release no GitHub
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
-        files: mouseghost-windows.zip
+        files: mouseghost-windows-*.zip
+        generate_release_notes: true
+        fail_on_unmatched_files: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
