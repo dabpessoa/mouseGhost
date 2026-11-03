@@ -16,3 +16,5 @@ jpackage --type app-image --name MeuApp --input input --main-jar mouseghost-1.0.
 
 ftype jarfile="C:\Program Files\Java\jdk-25.0.2+10\bin\javaw.exe" -jar "%1" %*
 
+
+https://dabpessoa.github.io/mouseGhost/
