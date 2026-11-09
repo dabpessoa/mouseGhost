@@ -1,12 +1,14 @@
+
 package me.dabpessoa.mouseghost.service;
 
+import me.dabpessoa.mouseghost.exceptions.TempoInatividadeForaDoIntervaloException;
+import me.dabpessoa.mouseghost.exceptions.TempoInatividadeInvalidoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.OptionalLong;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,42 +22,74 @@ class MouseServiceTest {
     @BeforeEach
     void setUp() {
         mouseMonitor = mock(MouseMonitor.class);
+
         mouseService = new MouseService(mouseMonitor);
+
         mouseService.setTempoDeInatividade("30");
+        mouseService.setIgnorarTeclado(false);
     }
 
     @Test
     void deveAceitarTempoDentroDoIntervalo() {
-        assertEquals(OptionalLong.of(120), mouseService.validarTempoInatividade(" 120 "));
+        assertEquals(
+                120L,
+                mouseService.validarTempoInatividade(" 120 ")
+        );
     }
 
     @Test
     void deveRejeitarTempoForaDoIntervalo() {
-        assertTrue(mouseService.validarTempoInatividade("0").isEmpty());
-        assertTrue(mouseService.validarTempoInatividade("3601").isEmpty());
-        assertTrue(mouseService.validarTempoInatividade("abc").isEmpty());
+        assertThrows(
+                TempoInatividadeForaDoIntervaloException.class,
+                () -> mouseService.validarTempoInatividade("0")
+        );
+
+        assertThrows(
+                TempoInatividadeForaDoIntervaloException.class,
+                () -> mouseService.validarTempoInatividade("3601")
+        );
+    }
+
+    @Test
+    void deveRejeitarTempoNaoNumerico() {
+        assertThrows(
+                TempoInatividadeInvalidoException.class,
+                () -> mouseService.validarTempoInatividade("abc")
+        );
     }
 
     @Test
     void deveUsarPadraoParaTempoInvalido() {
-        assertEquals(5L, mouseService.verificarTempoInatividade("invalido"));
+        assertEquals(
+                5L,
+                mouseService.verificarTempoInatividade("invalido")
+        );
     }
 
     @Test
     void deveIniciarComValorNormalizado() {
-        when(mouseMonitor.startMonitor(30L, false)).thenReturn(true);
+        when(mouseMonitor.startMonitor(30L, false))
+                .thenReturn(true);
 
         assertTrue(mouseService.start());
-        assertEquals("30", mouseService.getTempoDeInatividade());
+
+        assertEquals(
+                "30",
+                mouseService.getTempoDeInatividade()
+        );
+
         verify(mouseMonitor).startMonitor(30L, false);
     }
 
     @Test
     void deveEnviarPreferenciaDeIgnorarTecladoAoIniciar() {
         mouseService.setIgnorarTeclado(true);
-        when(mouseMonitor.startMonitor(30L, true)).thenReturn(true);
+
+        when(mouseMonitor.startMonitor(30L, true))
+                .thenReturn(true);
 
         assertTrue(mouseService.start());
+
         verify(mouseMonitor).startMonitor(30L, true);
     }
 
@@ -64,6 +98,8 @@ class MouseServiceTest {
         mouseService.stop();
 
         verify(mouseMonitor).stopMonitor();
+
         assertFalse(mouseService.isRunning());
     }
+
 }

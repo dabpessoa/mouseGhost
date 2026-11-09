@@ -107,6 +107,7 @@ public final class SettingsFileUtils {
     @Getter
     public enum PropertiesConfigEnum {
         OCIOSIDADE("ociosidade.segundos", "5"),
+        IGNORAR_TECLADO("teclado.ignorar", "false");
         ;
 
         private final String chave;

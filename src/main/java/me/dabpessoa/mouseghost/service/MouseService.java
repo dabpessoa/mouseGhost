@@ -22,8 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class MouseService implements MonitorListener {
 
-    public static final long TEMPO_INATIVIDADE_PADRAO = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
-
+    private static final long TEMPO_INATIVIDADE_PADRAO = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
     private static final long TEMPO_INATIVIDADE_MINIMO = 1L;
     private static final long TEMPO_INATIVIDADE_MAXIMO = 3600L;
     private static final String MSG_PADRAO_TEMPO_INATIVIDADE_INVALIDO = "Tempo de ociosidade inválido ({}). Usando o padrão de " + TEMPO_INATIVIDADE_PADRAO + " segundos.";
@@ -36,15 +35,21 @@ public class MouseService implements MonitorListener {
     @Value("${app.config.ociosidade.segundos}")
     private String tempoDeInatividade;
 
+    @Getter @Setter
+    @Value("${app.config.teclado.ignorar}")
+    private Boolean ignorarTeclado;
+
     public boolean start() {
         long tempoDeInatividadeValido = verificarTempoInatividade(tempoDeInatividade);
         tempoDeInatividade = Long.toString(tempoDeInatividadeValido);
+        ignorarTeclado = ignorarTeclado != null ? ignorarTeclado : Boolean.getBoolean(SettingsFileUtils.PropertiesConfigEnum.IGNORAR_TECLADO.getValorPadrao());
 
         mouseMonitor.setListener(this);
-        boolean started = mouseMonitor.startMonitor(tempoDeInatividadeValido);
+        boolean started = mouseMonitor.startMonitor(tempoDeInatividadeValido, ignorarTeclado);
 
         if (started) {
             log.info("Monitor iniciado. O mouse se moverá após {} segundos sem interação.", tempoDeInatividadeValido);
+            log.info("Considerar atividade do teclado: {}", !ignorarTeclado);
             log.info("[!] Para encerrar o monitoramento, clique no botão 'Parar', ou feche a janela principal.");
         }
 
@@ -64,6 +69,10 @@ public class MouseService implements MonitorListener {
         long tempo;
 
         try {
+            if (tempoOciosidade == null) {
+                throw new NumberFormatException();
+            }
+
             tempo = Long.parseLong(tempoOciosidade);
         } catch (NumberFormatException e) {
             throw new TempoInatividadeInvalidoException("O tempo de inatividade deve ser um número inteiro.");
@@ -94,7 +103,7 @@ public class MouseService implements MonitorListener {
 
     public MonitorSnapshot getSnapShot() {
         if (atomicMonitorSnapshot == null || !mouseMonitor.isMouseGhosting()) {
-            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), MonitorStatus.STOPPED);
+            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), false, MonitorStatus.STOPPED);
         }
         return atomicMonitorSnapshot.get();
     }

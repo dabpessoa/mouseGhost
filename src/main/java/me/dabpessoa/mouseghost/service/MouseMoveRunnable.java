@@ -18,6 +18,8 @@ public class MouseMoveRunnable implements Runnable {
     private static final Integer SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS = 1500;
 
     private final AtomicBoolean running;
+    private final AtomicBoolean keyboardActivityDetected;
+
     private volatile Thread workerThread;
 
     private final MouseMonitor mouseMonitor;
@@ -34,6 +36,8 @@ public class MouseMoveRunnable implements Runnable {
         this.random = new Random();
 
         this.running = new AtomicBoolean(false);
+        this.keyboardActivityDetected = new AtomicBoolean(false);
+
         mouseMoveDto = new MouseMoveDto(true);
     }
 
@@ -44,18 +48,26 @@ public class MouseMoveRunnable implements Runnable {
 
         try {
             while (isRunning() && !Thread.currentThread().isInterrupted()) {
+                /*
+                 * Verifica atividade do teclado antes de qualquer decisão
+                 * sobre o próximo movimento.
+                 */
+                processKeyboardActivity();
+
                 // Captura a posição real atual do mouse na tela
                 mouseMoveDto.setPosicaoAtualReal(MouseInfo.getPointerInfo().getLocation());
 
                 criarSnapshotEAtualizaListeners(mouseMoveDto);
 
-                // Se a posição mudou, o usuário mexeu o mouse fisicamente
+                // Verificação de movimento físico do mouse.
                 if (!mouseMoveDto.getPosicaoAtualReal().equals(mouseMoveDto.getUltimaPosicaoSalva())) {
                     if (mouseMoveDto.isModoBotAtivo()) {
                         log.info("-> Movimento humano detectado! Interrompendo o bot e reiniciando cronômetro.");
                         log.info("");
+
                         mouseMoveDto.setModoBotAtivo(false);
                     }
+
                     // Atualiza o marcador de tempo para agora
                     mouseMoveDto.setTempoUltimoMovimentoHumano(System.currentTimeMillis());
                     mouseMoveDto.setUltimaPosicaoSalva(mouseMoveDto.getPosicaoAtualReal());
@@ -76,36 +88,73 @@ public class MouseMoveRunnable implements Runnable {
                     int destinoY = random.nextInt(mouseMoveDto.getScreenSize().height - 50) + 25;
 
                     // Tenta mover o mouse. Se o usuário mexer durante o trajeto, a função aborta.
-                    boolean concluiuMovimento = mouseMonitor.fazerMovimentoDeMouseSimulandoMovimentoHumano(mouseMoveDto.getPosicaoAtualReal().x, mouseMoveDto.getPosicaoAtualReal().y, destinoX, destinoY);
+                    boolean concluiuMovimento = mouseMonitor.fazerMovimentoDeMouseSimulandoMovimentoHumano(mouseMoveDto.getPosicaoAtualReal().x, mouseMoveDto.getPosicaoAtualReal().y, destinoX, destinoY );
 
                     if (concluiuMovimento) {
                         // Atualiza a última posição para onde o robô deixou o mouse
                         mouseMoveDto.setUltimaPosicaoSalva(MouseInfo.getPointerInfo().getLocation());
 
-                        // Pequena pausa orgânica entre um destino e outro (1.5 a 3.5 segundos)
+                        // Pausa orgânica original: entre 1.5 e 3.5 segundos.
                         int pausa = 1500 + random.nextInt(2000);
+
                         for (int i = 0; i < pausa / 50; i++) {
-                            Thread.sleep(50);
-                            // Se o usuário mexer durante a pausa, quebra o ciclo imediatamente
+                            /*
+                             * Verifica o teclado antes de cada intervalo
+                             * da pausa orgânica.
+                             */
+                            if (processKeyboardActivity()) {
+                                break;
+                            }
+
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException exception) {
+                                if (processKeyboardActivity()) {
+                                    break;
+                                }
+                                throw exception;
+                            }
+
+                            // Verificação de movimento humano.
                             if (!MouseInfo.getPointerInfo().getLocation().equals(mouseMoveDto.getUltimaPosicaoSalva())) {
                                 break;
                             }
                         }
+
                     } else {
-                        // Se o movimento foi interrompido, reseta os tempos para o ciclo humano voltar
+                        /*
+                         * O movimento foi interrompido pelo usuário.
+                         * Reinicia o cronômetro e atualiza a posição.
+                         *
+                         * Este comportamento também atende à interrupção
+                         * causada pelo teclado.
+                         */
                         mouseMoveDto.setTempoUltimoMovimentoHumano(System.currentTimeMillis());
                         mouseMoveDto.setUltimaPosicaoSalva(MouseInfo.getPointerInfo().getLocation());
+                        mouseMoveDto.setModoBotAtivo(false);
                     }
                 } else {
-                    // Se ainda não deu o tempo de ociosidade, apenas aguarda um curto período antes de checar de novo
-                    Thread.sleep(SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS);
+                    try {
+                        Thread.sleep(SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS);
+                    } catch (InterruptedException exception) {
+                        /*
+                         * Se a interrupção veio do teclado, processa a
+                         * atividade e continua o monitoramento.
+                         *
+                         * Se veio do stop(), encerra normalmente.
+                         */
+                        if (!processKeyboardActivity()) {
+                            throw exception;
+                        }
+                    }
                 }
             }
-        } catch (InterruptedException e) {
-            // É fundamental restaurar o status de interrupção
+
+        } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
         } finally {
             running.set(false);
+            workerThread = null;
         }
     }
 
@@ -115,28 +164,77 @@ public class MouseMoveRunnable implements Runnable {
         }
 
         long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
+
         MonitorStatus status;
-        if (isRunning()) {
+        if (isRunning() && mouseMoveDto.isModoBotAtivo()) {
             status = MonitorStatus.MOVING;
+        } else if (isRunning()) {
+            status = MonitorStatus.WAITING;
         } else {
             status = MonitorStatus.STOPPED;
         }
 
-        MonitorSnapshot snapshot = new MonitorSnapshot(tempoParado, mouseMoveDto.getTempoUltimoMovimentoHumano(), mouseMoveDto.getPosicaoAtualReal(), status);
+        MonitorSnapshot snapshot = new MonitorSnapshot(
+                tempoParado,
+                mouseMoveDto.getTempoUltimoMovimentoHumano(),
+                mouseMoveDto.getPosicaoAtualReal(),
+                mouseMoveDto.isModoBotAtivo(),
+                status
+        );
 
         monitorListener.onMouseMove(snapshot);
     }
 
     public void stop() {
         running.set(false);
-        if (workerThread != null) {
-            workerThread.interrupt();
-            workerThread = null;
+
+        Thread thread = workerThread;
+        if (thread != null) {
+            thread.interrupt();
         }
     }
 
     public boolean isRunning() {
         return running.get();
+    }
+
+    /**
+     * Chamado pelo listener de teclado.
+     *
+     * Apenas sinaliza a atividade e acorda o thread responsável pelo mouse.
+     */
+    public void notifyKeyboardActivity() {
+        keyboardActivityDetected.set(true);
+        Thread thread = workerThread;
+
+        if (thread != null && running.get()) {
+            thread.interrupt();
+        }
+    }
+
+    /**
+     * Consome a sinalização de atividade do teclado.
+     */
+    public boolean consumeKeyboardActivity() {
+        return keyboardActivityDetected.getAndSet(false);
+    }
+
+    /**
+     * Processa a atividade detectada e reinicia o cronômetro.
+     */
+    private boolean processKeyboardActivity() {
+        if (!consumeKeyboardActivity()) {
+            return false;
+        }
+
+        log.info("-> Atividade de teclado detectada! Interrompendo o bot e reiniciando cronômetro.");
+
+        mouseMoveDto.setTempoUltimoMovimentoHumano(System.currentTimeMillis());
+        mouseMoveDto.setUltimaPosicaoSalva(MouseInfo.getPointerInfo().getLocation());
+        mouseMoveDto.setPosicaoAtualReal(mouseMoveDto.getUltimaPosicaoSalva());
+        mouseMoveDto.setModoBotAtivo(false);
+
+        return true;
     }
 
 }

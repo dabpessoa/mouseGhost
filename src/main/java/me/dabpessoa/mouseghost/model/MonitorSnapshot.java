@@ -1,7 +1,6 @@
 package me.dabpessoa.mouseghost.model;
 
 import java.awt.Point;
-import java.util.Objects;
 
 /**
  * Leitura imutável do monitor para a UI. O worker continua executando fora da
@@ -11,6 +10,7 @@ public record MonitorSnapshot(
         long tempoParado,
         long tempoUltimoMovimentoHumano,
         Point posicaoAtual,
+        boolean modoBotAtivo,
         MonitorStatus status) {
 
     public String posicaoAtualString() {

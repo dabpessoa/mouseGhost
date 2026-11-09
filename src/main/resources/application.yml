@@ -38,3 +38,4 @@ logging:
 app:
   config:
     ociosidade.segundos: ${ociosidade.segundos:#{null}}
+    teclado.ignorar: ${teclado.ignorar:#{null}}

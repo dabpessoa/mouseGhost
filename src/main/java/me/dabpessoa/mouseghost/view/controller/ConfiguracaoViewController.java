@@ -26,6 +26,9 @@ public class ConfiguracaoViewController {
     private TextField tempoOciosidadeInput;
 
     @FXML
+    private CheckBox ignorarTecladoCheckBox;
+
+    @FXML
     private Label validationMessage;
 
     @FXML
@@ -41,8 +44,13 @@ public class ConfiguracaoViewController {
         }
 
         String tempo = Long.toString(tempoInatividadeValido);
-        boolean saved = SettingsFileUtils.atualizarArquivoDePropriedades(Map.of(
-                SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempo)
+        boolean ignorarTeclado = ignorarTecladoCheckBox.isSelected();
+
+        boolean saved = SettingsFileUtils.atualizarArquivoDePropriedades(
+            Map.of(
+                SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempo,
+                SettingsFileUtils.PropertiesConfigEnum.IGNORAR_TECLADO, Boolean.toString(ignorarTeclado)
+            )
         );
 
         if (!saved) {
@@ -51,6 +59,8 @@ public class ConfiguracaoViewController {
         }
 
         mouseService.setTempoDeInatividade(tempo);
+        mouseService.setIgnorarTeclado(ignorarTeclado);
+
         tempoOciosidadeInput.setText(tempo);
 
         mostrarMensagem("Configuração salva com sucesso.", true);
@@ -58,7 +68,8 @@ public class ConfiguracaoViewController {
 
     @FXML
     protected void restaurarPadraoAction() {
-        tempoOciosidadeInput.setText(MouseService.TEMPO_INATIVIDADE_PADRAO + "");
+        tempoOciosidadeInput.setText(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
+        ignorarTecladoCheckBox.setSelected(Boolean.getBoolean(SettingsFileUtils.PropertiesConfigEnum.IGNORAR_TECLADO.getValorPadrao()));
         salvarAction();
     }
 
@@ -70,6 +81,7 @@ public class ConfiguracaoViewController {
     @FXML
     public void initialize() {
         tempoOciosidadeInput.setText(mouseService.getTempoDeInatividade());
+        ignorarTecladoCheckBox.setSelected(mouseService.getIgnorarTeclado());
         validationMessage.setManaged(false);
         validationMessage.setVisible(false);
     }
