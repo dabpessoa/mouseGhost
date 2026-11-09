@@ -35,7 +35,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="360.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="590.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
   <children>
 
     <fx:include fx:id="menu" source="../menu/menu-view.fxml"/>

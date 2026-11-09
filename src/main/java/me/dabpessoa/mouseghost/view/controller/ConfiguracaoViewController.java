@@ -1,12 +1,18 @@
 package me.dabpessoa.mouseghost.view.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.dabpessoa.mouseghost.exceptions.ApplicationRuntimeException;
 import me.dabpessoa.mouseghost.service.MouseService;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.OptionalLong;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -20,12 +26,40 @@ public class ConfiguracaoViewController {
     private TextField tempoOciosidadeInput;
 
     @FXML
-    protected void salvarAction() {
-        Long tempoOciosidade = mouseService.verificarTempoInatividade(tempoOciosidadeInput.getText());
-        SettingsFileUtils.atualizarArquivoDePropriedades(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempoOciosidade + "");
+    private Label validationMessage;
 
-        mouseService.setTempoDeInatividade(tempoOciosidade + "");
-        log.info("Tempo de ociosidade alterado para " + tempoOciosidade + " segundos.");
+    @FXML
+    protected void salvarAction() {
+        long tempoInatividadeValido;
+        try {
+            tempoInatividadeValido = mouseService.validarTempoInatividade(tempoOciosidadeInput.getText());
+        } catch (ApplicationRuntimeException e) {
+            mostrarMensagem(e.getMessage(), false);
+            tempoOciosidadeInput.requestFocus();
+            tempoOciosidadeInput.selectAll();
+            return;
+        }
+
+        String tempo = Long.toString(tempoInatividadeValido);
+        boolean saved = SettingsFileUtils.atualizarArquivoDePropriedades(Map.of(
+                SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE, tempo)
+        );
+
+        if (!saved) {
+            mostrarMensagem("Não foi possível salvar. Verifique as permissões da pasta de configurações.", false);
+            return;
+        }
+
+        mouseService.setTempoDeInatividade(tempo);
+        tempoOciosidadeInput.setText(tempo);
+
+        mostrarMensagem("Configuração salva com sucesso.", true);
+    }
+
+    @FXML
+    protected void restaurarPadraoAction() {
+        tempoOciosidadeInput.setText(MouseService.TEMPO_INATIVIDADE_PADRAO + "");
+        salvarAction();
     }
 
     @FXML
@@ -36,6 +70,16 @@ public class ConfiguracaoViewController {
     @FXML
     public void initialize() {
         tempoOciosidadeInput.setText(mouseService.getTempoDeInatividade());
+        validationMessage.setManaged(false);
+        validationMessage.setVisible(false);
+    }
+
+    private void mostrarMensagem(String mensagem, boolean sucesso) {
+        validationMessage.setText(mensagem);
+        validationMessage.getStyleClass().removeAll("form-message-success", "form-message-error");
+        validationMessage.getStyleClass().add(sucesso ? "form-message-success" : "form-message-error");
+        validationMessage.setManaged(true);
+        validationMessage.setVisible(true);
     }
 
 }

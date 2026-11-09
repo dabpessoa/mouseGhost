@@ -1,6 +1,5 @@
 package me.dabpessoa.mouseghost.utils.textarea;
 
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import org.slf4j.ILoggerFactory;
@@ -40,9 +39,6 @@ public final class TextAreaLogConfig {
         appender.start();
 
         root.addAppender(appender);
-
-        // Opcional: nível por código (o application.properties também resolve)
-        context.getLogger("me.dabpessoa.mouseghost").setLevel(Level.DEBUG);
     }
 
     public static void unregister() {

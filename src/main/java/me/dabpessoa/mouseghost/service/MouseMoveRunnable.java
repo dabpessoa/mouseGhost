@@ -1,7 +1,11 @@
 package me.dabpessoa.mouseghost.service;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import me.dabpessoa.mouseghost.model.MonitorListener;
+import me.dabpessoa.mouseghost.model.MonitorSnapshot;
+import me.dabpessoa.mouseghost.model.MonitorStatus;
 import me.dabpessoa.mouseghost.model.MouseMoveDto;
 
 import java.awt.MouseInfo;
@@ -18,6 +22,9 @@ public class MouseMoveRunnable implements Runnable {
 
     private final MouseMonitor mouseMonitor;
     private final Random random;
+
+    @Setter
+    private MonitorListener monitorListener;
 
     @Getter
     private final MouseMoveDto mouseMoveDto;
@@ -37,9 +44,10 @@ public class MouseMoveRunnable implements Runnable {
 
         try {
             while (isRunning() && !Thread.currentThread().isInterrupted()) {
-
                 // Captura a posição real atual do mouse na tela
                 mouseMoveDto.setPosicaoAtualReal(MouseInfo.getPointerInfo().getLocation());
+
+                criarSnapshotEAtualizaListeners(mouseMoveDto);
 
                 // Se a posição mudou, o usuário mexeu o mouse fisicamente
                 if (!mouseMoveDto.getPosicaoAtualReal().equals(mouseMoveDto.getUltimaPosicaoSalva())) {
@@ -99,6 +107,24 @@ public class MouseMoveRunnable implements Runnable {
         } finally {
             running.set(false);
         }
+    }
+
+    private void criarSnapshotEAtualizaListeners(MouseMoveDto mouseMoveDto) {
+        if (monitorListener == null) {
+            return;
+        }
+
+        long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
+        MonitorStatus status;
+        if (isRunning()) {
+            status = MonitorStatus.MOVING;
+        } else {
+            status = MonitorStatus.STOPPED;
+        }
+
+        MonitorSnapshot snapshot = new MonitorSnapshot(tempoParado, mouseMoveDto.getTempoUltimoMovimentoHumano(), mouseMoveDto.getPosicaoAtualReal(), status);
+
+        monitorListener.onMouseMove(snapshot);
     }
 
     public void stop() {

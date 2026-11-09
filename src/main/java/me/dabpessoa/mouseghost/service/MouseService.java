@@ -4,57 +4,108 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import me.dabpessoa.mouseghost.exceptions.ApplicationRuntimeException;
+import me.dabpessoa.mouseghost.exceptions.TempoInatividadeForaDoIntervaloException;
+import me.dabpessoa.mouseghost.exceptions.TempoInatividadeInvalidoException;
+import me.dabpessoa.mouseghost.model.MonitorListener;
+import me.dabpessoa.mouseghost.model.MonitorSnapshot;
+import me.dabpessoa.mouseghost.model.MonitorStatus;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MouseService {
+public class MouseService implements MonitorListener {
 
-    private static final String MSG_TEMPO_INATIVIDADE_INVALIDO = "Tempo de ociosidade inválido ({}). Usando tempo padrão.";
-    private static final Long TEMPO_INATIVIDADE_MINIMO = 1L;
-    private static final Long TEMPO_INATIVIDADE_MAXIMO = 3600L;
+    public static final long TEMPO_INATIVIDADE_PADRAO = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
+
+    private static final long TEMPO_INATIVIDADE_MINIMO = 1L;
+    private static final long TEMPO_INATIVIDADE_MAXIMO = 3600L;
+    private static final String MSG_PADRAO_TEMPO_INATIVIDADE_INVALIDO = "Tempo de ociosidade inválido ({}). Usando o padrão de " + TEMPO_INATIVIDADE_PADRAO + " segundos.";
 
     private final MouseMonitor mouseMonitor;
+
+    private AtomicReference<MonitorSnapshot> atomicMonitorSnapshot;
 
     @Getter @Setter
     @Value("${app.config.ociosidade.segundos}")
     private String tempoDeInatividade;
 
-    public void start() {
-        if (!mouseMonitor.isMouseGhosting()) {
-            log.info("----------======== Mouse Ghosting ========----------");
-            log.info("[+] Monitor de ociosidade iniciado com sucesso.");
-            log.info("[+] O mouse começará a se mover após " + tempoDeInatividade + " segundos parado.");
+    public boolean start() {
+        long tempoDeInatividadeValido = verificarTempoInatividade(tempoDeInatividade);
+        tempoDeInatividade = Long.toString(tempoDeInatividadeValido);
+
+        mouseMonitor.setListener(this);
+        boolean started = mouseMonitor.startMonitor(tempoDeInatividadeValido);
+
+        if (started) {
+            log.info("Monitor iniciado. O mouse se moverá após {} segundos sem interação.", tempoDeInatividadeValido);
             log.info("[!] Para encerrar o monitoramento, clique no botão 'Parar', ou feche a janela principal.");
-            log.info("----------======== ************** ========----------");
-            log.info("");
         }
 
-        long inatividadeLong = verificarTempoInatividade(tempoDeInatividade);
-        mouseMonitor.startMonitor(inatividadeLong);
+        return started;
     }
 
     public void stop() {
         mouseMonitor.stopMonitor();
+        log.info("Monitor parado.");
+    }
+
+    public boolean isRunning() {
+        return mouseMonitor.isMouseGhosting();
+    }
+
+    public long validarTempoInatividade(String tempoOciosidade) {
+        long tempo;
+
+        try {
+            tempo = Long.parseLong(tempoOciosidade);
+        } catch (NumberFormatException e) {
+            throw new TempoInatividadeInvalidoException("O tempo de inatividade deve ser um número inteiro.");
+        }
+
+        if (tempo < TEMPO_INATIVIDADE_MINIMO || tempo > TEMPO_INATIVIDADE_MAXIMO) {
+            throw new TempoInatividadeForaDoIntervaloException(String.format("O tempo de inatividade deve estar entre os números %d e %d.", TEMPO_INATIVIDADE_MINIMO, TEMPO_INATIVIDADE_MAXIMO));
+        }
+
+        return tempo;
     }
 
     public long verificarTempoInatividade(String tempoOciosidade) {
-        long tempo;
+        String mensagem = String.format(MSG_PADRAO_TEMPO_INATIVIDADE_INVALIDO, tempoOciosidade);
+
         try {
-            tempo = Long.parseLong(tempoOciosidade);
-            if (tempo >= TEMPO_INATIVIDADE_MINIMO && tempo <= TEMPO_INATIVIDADE_MAXIMO) {
-                return tempo;
+            return validarTempoInatividade(tempoOciosidade);
+        } catch (ApplicationRuntimeException e) {
+            if (e instanceof TempoInatividadeForaDoIntervaloException) {
+                log.warn(mensagem + " O tempo de inatividade deve estar entre os números {} e {}.", tempoOciosidade, TEMPO_INATIVIDADE_MINIMO, TEMPO_INATIVIDADE_MAXIMO);
             } else {
-                log.warn(MSG_TEMPO_INATIVIDADE_INVALIDO + " O tempo de inatividade deve estar entre os números " + TEMPO_INATIVIDADE_MINIMO + " e " + TEMPO_INATIVIDADE_MAXIMO + ".", tempoOciosidade);
+                log.warn(mensagem, tempoOciosidade);
             }
-        } catch (NumberFormatException e) {
-            log.warn(MSG_TEMPO_INATIVIDADE_INVALIDO, tempoOciosidade);
         }
 
-        return Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
+        return TEMPO_INATIVIDADE_PADRAO;
+    }
+
+    public MonitorSnapshot getSnapShot() {
+        if (atomicMonitorSnapshot == null || !mouseMonitor.isMouseGhosting()) {
+            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), MonitorStatus.STOPPED);
+        }
+        return atomicMonitorSnapshot.get();
+    }
+
+    @Override
+    public void onMouseMove(MonitorSnapshot snapshot) {
+        if (atomicMonitorSnapshot == null) {
+            atomicMonitorSnapshot = new AtomicReference<>(snapshot);
+            return;
+        }
+        atomicMonitorSnapshot.set(snapshot);
     }
 
 }

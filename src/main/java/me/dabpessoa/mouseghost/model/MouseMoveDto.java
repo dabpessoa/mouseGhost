@@ -3,11 +3,9 @@ package me.dabpessoa.mouseghost.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 
-import java.awt.Point;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.MouseInfo;
+import java.awt.*;
 
 @Data
 @AllArgsConstructor
@@ -21,19 +19,21 @@ public class MouseMoveDto {
     private long tempoDeInatividade;
     private Dimension screenSize;
 
-    public MouseMoveDto(boolean configurarValoresPadores) {
-        if (configurarValoresPadores) {
+    public MouseMoveDto(boolean configurarValoresPadroes) {
+        if (configurarValoresPadroes) {
             configurarValoresPadroes();
         }
     }
 
     public void configurarValoresPadroes() {
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        ultimaPosicaoSalva = MouseInfo.getPointerInfo().getLocation();
-        posicaoAtualReal = MouseInfo.getPointerInfo().getLocation();
+
+        Point pointer = MouseInfo.getPointerInfo() == null ? new Point(0, 0) : MouseInfo.getPointerInfo().getLocation();
+        ultimaPosicaoSalva = new Point(pointer);
+        posicaoAtualReal = new Point(pointer);
+
         tempoUltimoMovimentoHumano = System.currentTimeMillis();
-        tempoDeInatividade = 5; // In seconds.
+        tempoDeInatividade = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
         modoBotAtivo = false;
     }
-
 }

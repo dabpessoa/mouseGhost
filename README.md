@@ -1,20 +1,43 @@
-Stack: Java 25 + Spring Boot 4.0.5 + JavaFX 25 + AWT Robot + Maven.
+# Mouse Ghost
 
-Descrição: Aplicação desktop que detecta ociosidade e realiza movimentos de mouse orgânicos (curvas de Bézier + smoothstep) para manter sessões ativas.
+Aplicativo desktop para Windows que detecta períodos de inatividade e movimenta o cursor suavemente para manter a sessão ativa.
 
+O monitor trabalha localmente com Java AWT `Robot`. Não há servidor web, telemetria ou coleta de dados. Os links de apoio ao projeto abrem somente quando o usuário escolhe uma opção de doação.
 
+## Como usar
 
-Camada -> Componentes Principais -> Observação
-Bootstrap -> RunApplication e JavaFXApplication -> Spring Boot iniciado dentro do ciclo de vida do JavaFX
-Serviço de domínio -> MouseService, MouseMonitor, MouseMoveRunnable -> Lógica de ociosidade + movimento
-UI -> Controllers FXML + AbstractView / MainView -> Navegação por troca de conteúdo em Pane
-Persistência de config -> SettingsFileUtils + spring.config.import -> Arquivo em %APPDATA%/MouseGhost/settings.properties
-Infra -> Tray, logging em TextArea + arquivo, ícones -> Bem implementado
+1. Abra o aplicativo e confira o tempo de ociosidade em **Configurações**.
+2. Clique em **Iniciar monitor**.
+3. Acompanhe o estado e a contagem regressiva no cartão de status.
+4. Use **Ocultar na bandeja** para manter o monitor em segundo plano.
+5. Clique em **Parar** ou use a opção equivalente na bandeja para encerrar o monitoramento.
 
+O movimento é interrompido quando o usuário retoma o controle do mouse. O aplicativo também respeita o monitor em que o cursor está localizado e considera configurações de múltiplos monitores.
 
-jpackage --type app-image --name MeuApp --input input --main-jar mouseghost-1.0.0.jar --main-class org.springframework.boot.loader.launch.JarLauncher --dest dist
+Por padrão, digitar também é considerado atividade e reinicia o cronômetro. Em **Configurações**, ative **Ignorar teclado** se quiser que somente movimentos do mouse sejam considerados.
 
-ftype jarfile="C:\Program Files\Java\jdk-25.0.2+10\bin\javaw.exe" -jar "%1" %*
+## Desenvolvimento
 
+Requisitos:
 
-https://dabpessoa.github.io/mouseGhost/
+- JDK 25;
+- Maven 3.9 ou superior;
+- Windows para executar os recursos de AWT `Robot` e gerar o pacote nativo.
+
+Comandos principais:
+
+```powershell
+mvn test
+mvn clean package -Pwin-exe
+```
+
+O workflow `Verify` executa testes e valida o pacote em Pull Requests e na branch principal. O workflow de release gera o aplicativo Windows quando uma tag `v*` é publicada.
+
+## Organização
+
+- `service`: monitoramento, movimento e bandeja do sistema;
+- `model`: estado e fotografias imutáveis para a interface;
+- `view`: telas JavaFX e controllers;
+- `utils`: persistência de configurações, logging e recursos auxiliares.
+
+Página do projeto: https://dabpessoa.github.io/mouseGhost/

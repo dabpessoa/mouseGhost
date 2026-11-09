@@ -1,28 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="65.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
+<VBox spacing="18.0" styleClass="home-view" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.InicioViewController">
+    <padding>
+        <Insets bottom="24.0" left="28.0" right="28.0" top="24.0" />
+    </padding>
     <children>
-        <Button fx:id="startButton" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="botao" text="Iniciar" AnchorPane.leftAnchor="15.0" />
-        <Button fx:id="stopButton" layoutX="88.0" layoutY="13.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="botao, btn-1" text="Parar" AnchorPane.leftAnchor="88.0" />
-        <Button fx:id="bandejaButton" layoutX="171.0" layoutY="13.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" styleClass="botao, btn-1" text="Ocultar Janela" AnchorPane.leftAnchor="171.0" />
+        <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="hero-card">
+            <children>
+                <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="eyebrow" text="CONTROLE INTELIGENTE" />
+                        <Label styleClass="hero-title" text="Mantenha sua sessão ativa" wrapText="true" />
+                        <Label styleClass="hero-description" text="O Mouse Ghost aguarda sua inatividade e movimenta o cursor de forma suave quando necessário." wrapText="true" />
+                    </children>
+                </VBox>
+                <VBox minWidth="230.0" spacing="8.0" styleClass="status-card">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <children>
+                                <Circle fx:id="statusDot" radius="6.0" styleClass="status-dot" />
+                                <Label fx:id="statusLabel" styleClass="status-title" text="Parado" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="statusDetailLabel" styleClass="status-detail" text="Clique em Iniciar para começar." wrapText="true" />
+                        <ProgressBar fx:id="inactivityProgress" maxWidth="1.7976931348623157E308" progress="0.0" styleClass="activity-progress" />
+                        <Label fx:id="nextMoveLabel" styleClass="status-caption" text="" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+      <AnchorPane>
+         <children>
+              <Button fx:id="startButton" defaultButton="true" layoutX="80.0" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="primary-button" text="Iniciar monitor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              <Button fx:id="stopButton" layoutX="151.0" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="secondary-button" text="Parar" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              <Button fx:id="bandejaButton" layoutX="267.0" mnemonicParsing="false" onAction="#onEsconderNaBandejaClick" styleClass="secondary-button" text="Ocultar na bandeja" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              <Separator layoutX="241.0" layoutY="5.0" orientation="VERTICAL" prefHeight="29.0" prefWidth="0.0" />
+              <Button fx:id="doarCafeButton" mnemonicParsing="false" onAction="#onDoarCafeClick" styleClass="botao-doar-cafe" text="Doar um Café" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <graphic>
+                     <SVGPath content="M1.5 5 H11 V10 C11 12.5 9 14.5 6.5 14.5 H6 C3.5 14.5 1.5 12.5 1.5 10 Z M11 6.8 H12.2 C13.8 6.8 15 8 15 9.6 C15 11.2 13.8 12.4 12.2 12.4 H10.6 V11 H12.2 C13 11 13.6 10.4 13.6 9.6 C13.6 8.8 13 8.2 12.2 8.2 H11 Z" styleClass="icone-cafe" />
+                 </graphic>
+              </Button>
+         </children>
+      </AnchorPane>
 
-        <Button fx:id="doarCafeButton" mnemonicParsing="false" onAction="#onDoarCafeClick"
-                prefHeight="25.0" styleClass="botao-doar-cafe" text="Doar um Café"
-                AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="13.0">
-            <graphic>
-                <SVGPath styleClass="icone-cafe"
-                         content="M1.5 5 H11 V10 C11 12.5 9 14.5 6.5 14.5 H6 C3.5 14.5 1.5 12.5 1.5 10 Z M11 6.8 H12.2 C13.8 6.8 15 8 15 9.6 C15 11.2 13.8 12.4 12.2 12.4 H10.6 V11 H12.2 C13 11 13.6 10.4 13.6 9.6 C13.6 8.8 13 8.2 12.2 8.2 H11 Z" />
-            </graphic>
-        </Button>
-
-        <Separator layoutX="15.0" layoutY="51.0" prefHeight="4.0" prefWidth="582.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-        <TextArea fx:id="consoleTextArea" layoutX="14.0" layoutY="65.0" prefHeight="253.0" prefWidth="581.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0" />
-      <Separator layoutX="155.0" layoutY="13.0" orientation="VERTICAL" prefHeight="30.0" prefWidth="2.0" />
+        <VBox spacing="10.0" styleClass="activity-card" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <VBox minHeight="0.0" spacing="2.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="card-title" text="Atividade recente" />
+                                <Label fx:id="lastEventLabel" styleClass="card-description" text="Nenhuma atividade registrada nesta sessão." />
+                            </children>
+                        </VBox>
+                  <HBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Label styleClass="position-label" text="Cursor: " />
+                              <Label fx:id="positionLabel" alignment="CENTER_RIGHT" minWidth="60.0" prefWidth="60.0" styleClass="position-label" />
+                     </children>
+                  </HBox>
+                        <Button fx:id="clearLogButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#onClearLogClick" styleClass="text-button" text="Limpar" />
+                    </children>
+                </HBox>
+                <StackPane VBox.vgrow="ALWAYS">
+                    <children>
+                        <TextArea fx:id="consoleTextArea" editable="false" focusTraversable="false" styleClass="activity-log" wrapText="true" />
+                        <VBox fx:id="emptyConsoleLabel" alignment="CENTER" mouseTransparent="true" spacing="4.0" styleClass="empty-state">
+                            <children>
+                                <Label styleClass="empty-state-title" text="Tudo tranquilo por aqui" />
+                                <Label styleClass="empty-state-description" text="Inicie o monitor para acompanhar a atividade." />
+                            </children>
+                        </VBox>
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
     </children>
-</AnchorPane>
+</VBox>

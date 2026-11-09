@@ -70,8 +70,11 @@ public class JavaFXApplication extends Application {
     }
 
     private static void stopSpring() {
-        // Fecha o contexto do Spring para encerrar conexões com banco de dados, threads, etc.
-        springContext.close();
+        // Fecha o contexto do Spring para encerrar threads e recursos.
+        if (springContext != null) {
+            springContext.close();
+            springContext = null;
+        }
     }
 
 }

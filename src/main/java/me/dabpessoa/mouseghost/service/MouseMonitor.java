@@ -1,15 +1,15 @@
 package me.dabpessoa.mouseghost.service;
 
 import jakarta.annotation.PreDestroy;
+import me.dabpessoa.mouseghost.model.MonitorListener;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Point;
-
+import java.awt.Robot;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,42 +17,50 @@ import java.util.concurrent.Executors;
 @Service
 public class MouseMonitor {
 
-    private static final Integer BASE_SLEEP_TIME_BETWEEN_MOVES_IN_STEP_IN_MILLIS = 6;
-    private static final Integer BASE_MOVES_TIMES_FOR_STEP = 60;
+    private static final int BASE_SLEEP_TIME_BETWEEN_MOVES_IN_STEP_IN_MILLIS = 6;
+    private static final int BASE_MOVES_TIMES_FOR_STEP = 60;
 
     private final Random random;
     private final Robot robot;
     private final ExecutorService executor;
     private final MouseMoveRunnable mouseMoveRunnable;
 
-    @Value("${application.artifactId}")
-    private String appId;
-
-    public MouseMonitor() throws AWTException {
+    public MouseMonitor(@Value("${application.artifactId}") String appId) throws AWTException {
         this.random = new Random();
         this.robot = new Robot();
         this.mouseMoveRunnable = new MouseMoveRunnable(this);
         this.executor = Executors.newSingleThreadExecutor(r -> {
-            Thread t = new Thread(r, appId + "-monitor-thread");
-            t.setDaemon(true);
-            return t;
+            Thread thread = new Thread(r, appId + "-monitor-thread");
+            thread.setDaemon(true);
+            return thread;
         });
     }
 
-    public void startMonitor(long tempoDeInatividadeSegundos) {
-        if (isMouseGhosting()) {
-            return;
+    public synchronized boolean startMonitor(long tempoDeInatividadeSegundos) {
+        if (isMouseGhosting() || this.executor.isShutdown()) {
+            return false;
         }
 
         if (tempoDeInatividadeSegundos <= 0) {
             tempoDeInatividadeSegundos = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
         }
-
         mouseMoveRunnable.getMouseMoveDto().setTempoDeInatividade(tempoDeInatividadeSegundos);
-        executor.submit(mouseMoveRunnable);
+
+        try {
+            executor.submit(mouseMoveRunnable);
+        } catch (RuntimeException exception) {
+            stopMonitor();
+            throw exception;
+        }
+
+        return true;
     }
 
-    public void stopMonitor() {
+    public synchronized void stopMonitor() {
+        if (this.mouseMoveRunnable == null) {
+            return;
+        }
+
         this.mouseMoveRunnable.stop();
     }
 
@@ -102,9 +110,18 @@ public class MouseMonitor {
         return true;
     }
 
+    public void setListener(MonitorListener monitorListener) {
+        if (this.mouseMoveRunnable == null) {
+            return;
+        }
+
+        this.mouseMoveRunnable.setMonitorListener(monitorListener);
+    }
+
     @PreDestroy
     public synchronized void destroy() {
-        this.executor.shutdown();
+        stopMonitor();
+        executor.shutdownNow();
     }
 
 }

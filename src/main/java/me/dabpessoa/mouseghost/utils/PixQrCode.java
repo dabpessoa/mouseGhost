@@ -6,6 +6,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Gera o QR Code do Pix em formato vetorial a partir do código "copia e cola".
  * Um QR Code do Pix nada mais é do que esse mesmo texto codificado.
  */
+@Slf4j
 public final class PixQrCode {
 
     /** Margem de silêncio recomendada para leitura, em módulos (quadradinhos). */
@@ -94,7 +96,7 @@ public final class PixQrCode {
         Path destino = Path.of("/images/pix-qrcode.svg");
 
         salvarSvg(pixCopiaECola, destino);
-        System.out.println("Arquivo gerado: " + destino.toAbsolutePath());
+        log.info("Arquivo gerado: {}", destino.toAbsolutePath());
     }
 
 }

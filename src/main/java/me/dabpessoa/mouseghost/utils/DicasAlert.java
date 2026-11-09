@@ -26,8 +26,8 @@ public final class DicasAlert {
     private static final String TEXTO_SIMPLES = """
             1. COMO USAR
                 1.1  Clique em Iniciar para ativar o app e em Parar para desativá-lo.
-                1.2  Acompanhe o console da tela inicial: ele mostra o que o app está fazendo.
-                1.3  Ajuste o tempo de ociosidade em Configurações > Configurações Padrões
+                1.2  Acompanhe o painel de atividade da tela inicial: ele mostra o que o app está fazendo.
+                1.3  Ajuste o tempo de ociosidade em Configurações > Configurações
                        e clique em Salvar.
 
             2. COMO APROVEITAR MELHOR
@@ -81,10 +81,10 @@ public final class DicasAlert {
                 secao("1", "Como usar"),
                 item("1.1", 0, texto("Clique em "), destaque("Iniciar"),
                         texto(" para ativar o app e em "), destaque("Parar"), texto(" para desativá-lo.")),
-                item("1.2", 0, texto("Acompanhe o "), destaque("console"),
+                item("1.2", 0, texto("Acompanhe o "), destaque("painel de atividade"),
                         texto(" da tela inicial: ele mostra o que o app está fazendo.")),
                 item("1.3", 0, texto("Ajuste o tempo de ociosidade em "),
-                        destaque("Configurações > Configurações Padrões"),
+                        destaque("Configurações"),
                         texto(" e clique em "), destaque("Salvar"), texto(".")),
 
                 secao("2", "Como aproveitar melhor"),

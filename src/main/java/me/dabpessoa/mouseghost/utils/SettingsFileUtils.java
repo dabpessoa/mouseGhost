@@ -1,11 +1,13 @@
 package me.dabpessoa.mouseghost.utils;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +19,7 @@ import java.util.Properties;
  * Configurações do usuário, gravadas em %APPDATA%\MouseGhost\settings.properties.
  * Os valores padrão ficam no código; o arquivo só guarda o que o usuário alterou.
  */
+@Slf4j
 public final class SettingsFileUtils {
 
     private static final String PASTA = "MouseGhost";
@@ -35,18 +38,18 @@ public final class SettingsFileUtils {
         salvar(PropertiesConfigEnum.createDefaultProperties(), arquivo);
     }
 
-    public static void atualizarArquivoDePropriedades(PropertiesConfigEnum configEnum, String valor) {
-        atualizarArquivoDePropriedades(Map.of(configEnum, valor));
+    public static boolean atualizarArquivoDePropriedades(PropertiesConfigEnum configEnum, String valor) {
+        return atualizarArquivoDePropriedades(Map.of(configEnum, valor));
     }
 
-    public static void atualizarArquivoDePropriedades(Map<PropertiesConfigEnum, String> valuesMap) {
+    public static boolean atualizarArquivoDePropriedades(Map<PropertiesConfigEnum, String> valuesMap) {
         Properties arquivo = lerArquivoDePropriedades();
 
         for (Map.Entry<PropertiesConfigEnum, String> entry : valuesMap.entrySet()) {
             arquivo.setProperty(entry.getKey().getChave(), entry.getValue());
         }
 
-        salvar(arquivo, resolveFilePath());
+        return salvar(arquivo, resolveFilePath());
     }
 
     public static Properties lerArquivoDePropriedades() {
@@ -55,16 +58,16 @@ public final class SettingsFileUtils {
         Properties properties = new Properties();
         try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             properties.load(reader);
-            System.out.println("Configurações carregadas de " + path);
+            log.debug("Configurações carregadas de {}", path);
         } catch (IOException | RuntimeException e) {
             // Arquivo corrompido ou ilegível não pode impedir o app de abrir
-            System.err.println("Não foi possível ler {}; Arquivo corrompido ou ilegível. Path: " + path);
+            log.warn("Não foi possível ler o arquivo de configurações {}. Usando valores padrão.", path, e);
         }
 
         return properties;
     }
 
-    private static void salvar(Properties properties, Path path) {
+    private static boolean salvar(Properties properties, Path path) {
         try {
             Files.createDirectories(path.getParent());
 
@@ -74,12 +77,20 @@ public final class SettingsFileUtils {
                 properties.store(writer, "Mouse Ghost - Configurações do Usuário");
             }
 
-            Files.move(temporario, path, StandardCopyOption.REPLACE_EXISTING);
+            try {
+                Files.move(temporario, path, StandardCopyOption.ATOMIC_MOVE,
+                        StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException exception) {
+                Files.move(temporario, path, StandardCopyOption.REPLACE_EXISTING);
+            }
 
-            System.out.println("Configurações salvas em " + path);
+            log.info("Configurações salvas em {}", path);
+
+            return true;
         } catch (IOException | RuntimeException e) {
             // Não impede o app de abrir: o import é "optional" e os padrões do application.yml valem
-            System.err.println("Não foi possível criar " + path + ": " + e.getMessage());
+            log.error("Não foi possível salvar as configurações em {}.", path, e);
+            return false;
         }
     }
 
