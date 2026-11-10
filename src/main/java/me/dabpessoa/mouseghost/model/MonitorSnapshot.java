@@ -9,6 +9,7 @@ import java.awt.Point;
 public record MonitorSnapshot(
         long tempoParado,
         long tempoUltimoMovimentoHumano,
+        long tempoLimiteDeInatividadeSegundos,
         Point posicaoAtual,
         boolean modoBotAtivo,
         MonitorStatus status,
@@ -18,6 +19,28 @@ public record MonitorSnapshot(
         return posicaoAtual != null ?
                 String.format("(%d | %d)", posicaoAtual.x, posicaoAtual.y) :
                 " - ";
+    }
+
+    /**
+     * Calcula o progresso da ociosidade entre 0.0 e 1.0.
+     */
+    public double progressoOciosidade(long agoraMillis) {
+        if (status == null || status == MonitorStatus.STOPPED) {
+            return 0.0;
+        }
+
+        if (status == MonitorStatus.MOVING || modoBotAtivo) {
+            return 1.0;
+        }
+
+        if (tempoUltimoMovimentoHumano <= 0 || tempoLimiteDeInatividadeSegundos <= 0) {
+            return 0.0;
+        }
+
+        long tempoDecorrido = Math.max(0L, agoraMillis - tempoUltimoMovimentoHumano);
+        double progresso = (double) tempoDecorrido / (tempoLimiteDeInatividadeSegundos * 1000.0);
+
+        return Math.max(0.0, Math.min(1.0, progresso));
     }
 
 }

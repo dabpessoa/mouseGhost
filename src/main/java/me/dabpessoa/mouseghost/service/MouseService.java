@@ -104,7 +104,7 @@ public class MouseService implements MonitorListener {
 
     public MonitorSnapshot getSnapShot() {
         if (atomicMonitorSnapshot == null || !mouseMonitor.isMouseGhosting()) {
-            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), false, MonitorStatus.STOPPED, TipoAtividadeHumana.NENHUM);
+            return new MonitorSnapshot(-1, -1, TEMPO_INATIVIDADE_PADRAO, MouseInfo.getPointerInfo().getLocation(), false, MonitorStatus.STOPPED, TipoAtividadeHumana.NENHUM);
         }
         return atomicMonitorSnapshot.get();
     }

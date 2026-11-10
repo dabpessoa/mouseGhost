@@ -1,14 +1,20 @@
 package me.dabpessoa.mouseghost.view.controller;
 
 import jakarta.annotation.PreDestroy;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +27,7 @@ import me.dabpessoa.mouseghost.utils.textarea.TextAreaAppender;
 import me.dabpessoa.mouseghost.utils.textarea.TextAreaLogConfig;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -30,8 +37,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class InicioViewController {
 
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss")
-            .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss").withZone(ZoneId.systemDefault());
+    private static final Duration PROGRESS_ANIMATION_DURATION = Duration.millis(900);
 
     private final MouseService mouseService;
     private final MenuViewController menuViewController;
@@ -52,7 +59,9 @@ public class InicioViewController {
     @FXML private ProgressBar inactivityProgress;
     @FXML private VBox emptyConsoleLabel;
 
+    private Timeline inactivityProgressAnimation;
     private Timeline statusTimeline;
+
     private boolean lastRenderedRunning;
 
     @FXML
@@ -144,75 +153,55 @@ public class InicioViewController {
         statusDetailLabel.setText(Objects.requireNonNullElse(snapshot.status(), MonitorStatus.STOPPED).getDetalhe());
         nextMoveLabel.setText(Objects.requireNonNullElse(snapshot.status(), MonitorStatus.STOPPED).getProximaAcao());
 
-//        MonitorSnapshot snapshot = mouseService.getSnapShot();
+        animateInactivityProgress(snapshot.progressoOciosidade(System.currentTimeMillis()));
 
-//        String title = "title";
-//        String detail = "detail";
-//        String nextAction = "nextAction";
-
-//        MonitorStatus status = active ? snapshot.status() : MonitorStatus.STOPPED;
-//        switch (status) {
-//            case WAITING -> {
-//                title = "Aguardando";
-//                detail = "Monitor ativo e observando sua atividade.";
-//                nextAction = snapshot.secondsUntilMovement() > 0
-//                        ? "Próximo movimento em " + snapshot.secondsUntilMovement() + "s"
-//                        : "Preparando próximo ciclo";
-//            }
-//            case MOVING -> {
-//                title = "Movimentando";
-//                detail = "O cursor está sendo movido suavemente.";
-//                nextAction = "Mova o mouse para retomar o controle";
-//            }
-//            default -> {
-//                title = "Parado";
-//                detail = "Clique em Iniciar para começar.";
-//                nextAction = "O monitor está desligado";
-//            }
-//        }
-//
-//        statusLabel.setText(title);
-//        statusDetailLabel.setText(detail);
-//        nextMoveLabel.setText(nextAction);
-//        statusDot.getStyleClass().removeIf(style -> style.startsWith("status-dot-"));
-//        statusDot.getStyleClass().add("status-dot-" + status.name().toLowerCase());
-//
-//        double progress = 0.0;
-//        if (status == MonitorStatus.WAITING && snapshot.inactivitySeconds() > 0) {
-//            progress = 1.0 - ((double) snapshot.secondsUntilMovement()
-//                    / snapshot.inactivitySeconds());
-//            progress = Math.max(0.0, Math.min(1.0, progress));
-//        } else if (status == MonitorStatus.MOVING) {
-//            progress = 1.0;
-//        }
-//        inactivityProgress.setProgress(progress);
-//
-//        Point position = snapshot.currentPosition();
-//        positionLabel.setText(position == null
-//                ? "Cursor: —"
-//                : "Cursor: " + position.x + ", " + position.y);
-//
-//        if (snapshot.running() && snapshot.lastHumanMovementAt() > 0) {
-//            lastEventLabel.setText("Última interação detectada às "
-//                    + TIME_FORMATTER.format(Instant.ofEpochMilli(snapshot.lastHumanMovementAt())));
-//        } else {
-//            lastEventLabel.setText("Nenhuma atividade registrada nesta sessão.");
-//        }
+        if (snapshot.status() == MonitorStatus.WAITING) {
+            lastEventLabel.setText("O movimento humano está sendo monitorado.");
+        } else if (snapshot.status() != MonitorStatus.STOPPED && snapshot.tempoUltimoMovimentoHumano() > 0) {
+            lastEventLabel.setText("Última interação humana detectada às " + TIME_FORMATTER.format(Instant.ofEpochMilli(snapshot.tempoUltimoMovimentoHumano())));
+        } else {
+            lastEventLabel.setText("Nenhuma histórico de atividade registrada.");
+        }
 
         atualizarEstadoVazio();
     }
 
     private void atualizarEstadoVazio() {
-        boolean mostrarEstadoVazio = !mouseService.isRunning()
-                && consoleTextArea.getText().isBlank();
+        boolean mostrarEstadoVazio = !mouseService.isRunning() && consoleTextArea.getText().isBlank();
+
         emptyConsoleLabel.setVisible(mostrarEstadoVazio);
         emptyConsoleLabel.setManaged(mostrarEstadoVazio);
+    }
+
+    private void animateInactivityProgress(double targetProgress) {
+        // Garante que o valor esteja entre 0 e 1.
+        targetProgress = Math.max(0.0, Math.min(1.0, targetProgress));
+
+        // Interrompe uma animação anterior, caso ainda esteja executando.
+        if (inactivityProgressAnimation != null) {
+            inactivityProgressAnimation.stop();
+        }
+
+        // Cria a transição para o novo valor.
+        inactivityProgressAnimation = new Timeline(
+            new KeyFrame(PROGRESS_ANIMATION_DURATION, new KeyValue(inactivityProgress.progressProperty(), targetProgress, Interpolator.EASE_BOTH))
+        );
+
+        inactivityProgressAnimation.playFromStart();
     }
 
     @PreDestroy
     public synchronized void destroy() {
         if (statusTimeline != null) {
             statusTimeline.stop();
+            statusTimeline = null;
+            log.info("Barra de status (Timer) finalizado com sucesso.");
+        }
+
+        if (inactivityProgressAnimation != null) {
+            inactivityProgressAnimation.stop();
+            inactivityProgressAnimation = null;
+            log.info("Barra de animação (Timer) finalizada com sucesso.");
         }
     }
 

@@ -96,6 +96,7 @@ public class MouseMoveRunnable implements Runnable {
         MonitorSnapshot snapshot = new MonitorSnapshot(
                 tempoParado,
                 mouseMoveDto.getTempoUltimoMovimentoHumano(),
+                mouseMoveDto.getTempoDeInatividade(),
                 mouseMoveDto.getPosicaoAtualReal(),
                 mouseMoveDto.isModoBotAtivo(),
                 status,

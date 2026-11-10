@@ -87,18 +87,26 @@
     -fx-fill: #A5A8B8;
 }
 
-.activity-progress {
+/* ProgressBar de inatividade */
+.progress-bar.activity-progress {
     -fx-pref-height: 7px;
+    -fx-min-height: 7px;
+    -fx-max-height: 7px;
+    -fx-accent: #625AD0;
 }
 
-.activity-progress .track {
+/* Fundo da barra */
+.progress-bar.activity-progress > .track {
     -fx-background-color: #E8E9F2;
-    -fx-background-radius: 8;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 0;
 }
 
-.activity-progress .bar {
+/* Parte preenchida */
+.progress-bar.activity-progress > .bar {
     -fx-background-color: #625AD0;
-    -fx-background-radius: 8;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 0;
 }
 
 .action-bar {
