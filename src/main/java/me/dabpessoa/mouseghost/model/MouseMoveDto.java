@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.MouseInfo;
 
 @Data
 @AllArgsConstructor

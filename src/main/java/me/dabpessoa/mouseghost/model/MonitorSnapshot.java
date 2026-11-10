@@ -11,7 +11,8 @@ public record MonitorSnapshot(
         long tempoUltimoMovimentoHumano,
         Point posicaoAtual,
         boolean modoBotAtivo,
-        MonitorStatus status) {
+        MonitorStatus status,
+        TipoAtividadeHumana tipoAtividadeHumana) {
 
     public String posicaoAtualString() {
         return posicaoAtual != null ?

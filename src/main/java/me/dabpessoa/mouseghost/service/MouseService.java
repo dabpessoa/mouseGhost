@@ -10,11 +10,12 @@ import me.dabpessoa.mouseghost.exceptions.TempoInatividadeInvalidoException;
 import me.dabpessoa.mouseghost.model.MonitorListener;
 import me.dabpessoa.mouseghost.model.MonitorSnapshot;
 import me.dabpessoa.mouseghost.model.MonitorStatus;
+import me.dabpessoa.mouseghost.model.TipoAtividadeHumana;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.MouseInfo;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -73,7 +74,7 @@ public class MouseService implements MonitorListener {
                 throw new NumberFormatException();
             }
 
-            tempo = Long.parseLong(tempoOciosidade);
+            tempo = Long.parseLong(tempoOciosidade.trim());
         } catch (NumberFormatException e) {
             throw new TempoInatividadeInvalidoException("O tempo de inatividade deve ser um número inteiro.");
         }
@@ -103,7 +104,7 @@ public class MouseService implements MonitorListener {
 
     public MonitorSnapshot getSnapShot() {
         if (atomicMonitorSnapshot == null || !mouseMonitor.isMouseGhosting()) {
-            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), false, MonitorStatus.STOPPED);
+            return new MonitorSnapshot(-1, -1, MouseInfo.getPointerInfo().getLocation(), false, MonitorStatus.STOPPED, TipoAtividadeHumana.NENHUM);
         }
         return atomicMonitorSnapshot.get();
     }

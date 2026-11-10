@@ -11,7 +11,6 @@ import me.dabpessoa.mouseghost.service.MouseService;
 import me.dabpessoa.mouseghost.utils.SettingsFileUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.OptionalLong;
 import java.util.Map;
 
 @Slf4j
