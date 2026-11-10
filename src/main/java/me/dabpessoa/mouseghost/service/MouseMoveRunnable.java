@@ -8,6 +8,8 @@ import me.dabpessoa.mouseghost.model.MouseMoveDto;
 import me.dabpessoa.mouseghost.model.MonitorStatus;
 import me.dabpessoa.mouseghost.model.TipoAtividadeHumana;
 import me.dabpessoa.mouseghost.model.MonitorSnapshot;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 import java.awt.Robot;
 import java.awt.AWTException;
@@ -152,7 +154,7 @@ public class MouseMoveRunnable implements Runnable {
             }
         } else {
             // Se ainda não deu o tempo de ociosidade, apenas aguarda um curto período antes de checar de novo
-            Thread.sleep(SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS);
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(SLEEP_TIME_FOR_THREAD_IDLE_CHECK_IN_MILLIS));
         }
     }
 
@@ -242,6 +244,11 @@ public class MouseMoveRunnable implements Runnable {
 
     public void notificarAtividadeNoTeclado() {
         keyboardActivityDetected.set(true);
+
+        Thread thread = workerThread;
+        if (thread != null) {
+            LockSupport.unpark(thread);
+        }
     }
 
 }
