@@ -26,6 +26,7 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
 
     private List<Runnable> keyboardListeners;
     private boolean ownsNativeHook;
+    private boolean nativeKeyListenerRegistered;
 
     public void initNativeListener() {
         this.keyboardListeners = new CopyOnWriteArrayList<>();
@@ -34,20 +35,23 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
         Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.WARNING);
 
         try {
-            /*
-             * Verifica se outro componente já registrou o hook.
-             * Nesse caso, não assumimos a propriedade do hook global.
-             */
-            boolean hookAlreadyRegistered = GlobalScreen.isNativeHookRegistered();
-
-            GlobalScreen.addNativeKeyListener(this);
-
-            if (!hookAlreadyRegistered) {
+            if (!GlobalScreen.isNativeHookRegistered()) {
                 GlobalScreen.registerNativeHook();
                 ownsNativeHook = true;
+                log.info("Hook global do teclado registrado.");
+            } else {
+                log.debug("Hook global do teclado já estava registrado.");
+            }
+
+            /*
+             * Adiciona o listener somente uma vez.
+             */
+            if (!nativeKeyListenerRegistered) {
+                GlobalScreen.addNativeKeyListener(this);
+                nativeKeyListenerRegistered = true;
+                log.info("Listener global do teclado registrado.");
             }
         } catch (NativeHookException | RuntimeException exception) {
-            destroy();
             throw new IllegalStateException("Não foi possível iniciar a captura global do teclado.", exception);
         }
     }
@@ -60,6 +64,10 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
 
         checkKeyboardListeners();
         keyboardListeners.add(listener);
+        log.debug(
+                "Listener de atividade do teclado adicionado. Total: {}",
+                keyboardListeners.size()
+        );
     }
 
     @Override
@@ -78,6 +86,13 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
         return !keyboardListeners.isEmpty();
     }
 
+    @Override
+    public void clearListeners() {
+        checkKeyboardListeners();
+        keyboardListeners.clear();
+        log.info("Listeners da sessão de teclado removidos.");
+    }
+
     public void checkKeyboardListeners() {
         if (keyboardListeners == null) {
             throw new ApplicationRuntimeException("Listeners não carregados. Verifique se o método init() foi devidamente chamado.");
@@ -89,7 +104,7 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
      */
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
-        System.out.println("========= TECLA PRESSIONADA ===========> " + event);
+        log.debug("Evento global de teclado detectado.");
 
         if (keyboardListeners == null || keyboardListeners.isEmpty()) {
             return;
@@ -118,33 +133,30 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
         // Sem implementação intencional.
     }
 
-    public void stopNativeListener() {
-        GlobalScreen.removeNativeKeyListener(this);
+    @PreDestroy
+    public void destroy() {
+        clearListeners();
+        if (nativeKeyListenerRegistered) {
+            GlobalScreen.removeNativeKeyListener(this);
+            nativeKeyListenerRegistered = false;
+        }
 
         /*
-         * Só encerra o hook global se ele foi iniciado por esta classe.
-         * Isso evita desligar um hook que eventualmente pertença
-         * a outro componente da aplicação.
+         * Só encerramos o hook se ele pertence a esta aplicação.
+         *
+         * Isso evita desligar um hook que tenha sido iniciado por
+         * outro componente.
          */
-        if (ownsNativeHook) {
+        if (ownsNativeHook && GlobalScreen.isNativeHookRegistered()) {
             try {
                 GlobalScreen.unregisterNativeHook();
-                log.info("Captura global do teclado encerrada.");
+                log.info("Hook global do teclado encerrado definitivamente.");
             } catch (NativeHookException | RuntimeException exception) {
-                log.warn("Não foi possível encerrar completamente o hook do teclado.", exception);
+                log.warn("Não foi possível encerrar completamente o hook global.", exception);
             }
         }
 
-        this.ownsNativeHook = false;
-    }
-
-    @PreDestroy
-    public void destroy() {
-        if (keyboardListeners != null) {
-            keyboardListeners.clear();
-            keyboardListeners = null;
-        }
-        stopNativeListener();
+        ownsNativeHook = false;
     }
 
 }

@@ -53,13 +53,13 @@ public class MouseMonitor {
             nativeKeyboardMonitor.initNativeListener();
             nativeKeyboardMonitor.addListener(mouseMoveRunnable::notificarAtividadeNoTeclado);
         } else {
-            nativeKeyboardMonitor.destroy();
+            nativeKeyboardMonitor.clearListeners();
         }
 
         try {
             executor.submit(mouseMoveRunnable);
         } catch (RuntimeException exception) {
-            nativeKeyboardMonitor.destroy();
+            nativeKeyboardMonitor.clearListeners();
             stopMonitor();
             throw exception;
         }
@@ -68,7 +68,7 @@ public class MouseMonitor {
     }
 
     public synchronized void stopMonitor() {
-        nativeKeyboardMonitor.destroy();
+        nativeKeyboardMonitor.clearListeners();
 
         if (mouseMoveRunnable != null) {
             mouseMoveRunnable.stop();

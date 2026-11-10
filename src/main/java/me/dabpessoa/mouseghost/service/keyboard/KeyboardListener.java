@@ -16,4 +16,6 @@ public interface KeyboardListener {
 
     boolean hasAnyListener();
 
+    void clearListeners();
+
 }
