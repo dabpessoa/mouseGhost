@@ -56,7 +56,10 @@ public class MouseMoveRunnable implements Runnable {
         try {
             while (isRunning() && workerThread != null && !workerThread.isInterrupted()) {
                 mouseMoveDto.setPosicaoAtualReal(MouseInfo.getPointerInfo().getLocation());
+
                 TipoAtividadeHumana tipoAtividadeHumana = verificaEProcessaAtividadeHumana();
+                // Após verificação de atividade humana, setar o controlador de atividade do teclado para "false".
+                keyboardActivityDetected.set(false);
 
                 criarSnapshotEAtualizaListeners(mouseMoveDto, tipoAtividadeHumana);
 
@@ -140,12 +143,13 @@ public class MouseMoveRunnable implements Runnable {
                 // Pequena pausa orgânica entre um destino e outro (1.5 a 3.5 segundos)
                 int pausa = 1500 + random.nextInt(2000);
                 for (int i = 0; i < pausa / 50; i++) {
-                    Thread.sleep(50);
                     // Se houver atividade humana durante a pausa, quebra o ciclo imediatamente.
                     TipoAtividadeHumana tipoAtividadeHumana = verificaAtividadeHumana();
                     if (tipoAtividadeHumana.houveAtividadeHumana()) {
                         break;
                     }
+
+                    LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(50));
                 }
             } else {
                 // Se o movimento foi interrompido, reseta os tempos para o ciclo humano voltar
@@ -179,7 +183,7 @@ public class MouseMoveRunnable implements Runnable {
 
             // Verificações de interrupção.
             boolean moveuMouse = i > 0 && (posicaoFisicaAgora.x != ultimoXColocado || posicaoFisicaAgora.y != ultimoYColocado);
-            boolean atividadeNoTeclado = keyboardActivityDetected.getAndSet(false);
+            boolean atividadeNoTeclado = houveAtividadeNoTeclado();
             if (moveuMouse || atividadeNoTeclado) {
                 return false; // Interrompe imediatamente, pois o humano tomou o controle.
             }
@@ -197,7 +201,7 @@ public class MouseMoveRunnable implements Runnable {
             ultimoXColocado = x;
             ultimoYColocado = y;
 
-            Thread.sleep(BASE_SLEEP_TIME_BETWEEN_MOVES_IN_STEP_IN_MILLIS + random.nextInt(5));
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(BASE_SLEEP_TIME_BETWEEN_MOVES_IN_STEP_IN_MILLIS + random.nextInt(5)));
         }
 
         return true;
@@ -219,8 +223,8 @@ public class MouseMoveRunnable implements Runnable {
         return tipoAtividadeHumana;
     }
 
-    public TipoAtividadeHumana verificaAtividadeHumana() {
-        boolean atividadeNoTeclado = keyboardActivityDetected.getAndSet(false);
+    private TipoAtividadeHumana verificaAtividadeHumana() {
+        boolean atividadeNoTeclado = houveAtividadeNoTeclado();
         boolean atividadeNoMouse = !MouseInfo.getPointerInfo().getLocation().equals(mouseMoveDto.getUltimaPosicaoSalva());
 
         TipoAtividadeHumana tipoAtividadeHumana;
@@ -249,6 +253,10 @@ public class MouseMoveRunnable implements Runnable {
         if (thread != null) {
             LockSupport.unpark(thread);
         }
+    }
+
+    public boolean houveAtividadeNoTeclado() {
+        return keyboardActivityDetected.get();
     }
 
 }
