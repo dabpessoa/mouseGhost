@@ -167,10 +167,8 @@ public class MouseMoveRunnable implements Runnable {
         int ultimoYColocado = y1;
 
         for (int i = 0; i <= passos; i++) {
-            Point posicaoFisicaAgora = MouseInfo.getPointerInfo().getLocation();
-
             // Verificações de interrupção.
-            boolean moveuMouse = i > 0 && (posicaoFisicaAgora.x != ultimoXColocado || posicaoFisicaAgora.y != ultimoYColocado);
+            boolean moveuMouse = i > 0 &&  houveAtividadeNoMouse(new Point(ultimoXColocado, ultimoYColocado));
             boolean atividadeNoTeclado = houveAtividadeNoTeclado();
             if (moveuMouse || atividadeNoTeclado) {
                 return false; // Interrompe imediatamente, pois o humano tomou o controle.
@@ -224,7 +222,7 @@ public class MouseMoveRunnable implements Runnable {
 
     private TipoAtividadeHumana verificaAtividadeHumana() {
         boolean atividadeNoTeclado = houveAtividadeNoTeclado();
-        boolean atividadeNoMouse = !MouseInfo.getPointerInfo().getLocation().equals(mouseMoveDto.getUltimaPosicaoSalva());
+        boolean atividadeNoMouse = houveAtividadeNoMouse(mouseMoveDto.getUltimaPosicaoSalva());
 
         TipoAtividadeHumana tipoAtividadeHumana;
 
@@ -241,6 +239,10 @@ public class MouseMoveRunnable implements Runnable {
 
     private boolean houveAtividadeNoTeclado() {
         return keyboardActivityDetected.get();
+    }
+
+    private boolean houveAtividadeNoMouse(Point pontoDeComparacao) {
+        return !MouseInfo.getPointerInfo().getLocation().equals(pontoDeComparacao);
     }
 
     public void notificarAtividadeNoTeclado() {
