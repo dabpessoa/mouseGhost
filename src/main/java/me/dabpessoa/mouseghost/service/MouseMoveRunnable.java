@@ -106,19 +106,6 @@ public class MouseMoveRunnable implements Runnable {
         monitorListener.onMouseMove(snapshot);
     }
 
-    public void stop() {
-        running.set(false);
-
-        Thread thread = workerThread;
-        if (thread != null) {
-            thread.interrupt();
-        }
-    }
-
-    public boolean isRunning() {
-        return running.get();
-    }
-
     private void verificaMovimentoOrganicoDoMouse() throws InterruptedException {
         long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
         long limiteMilissegundos = mouseMoveDto.getTempoDeInatividade() * 1000L;
@@ -169,7 +156,7 @@ public class MouseMoveRunnable implements Runnable {
      * Retorna true se concluiu o movimento.
      * Retorna false se houve intervenção humana.
      */
-    public boolean fazerMovimentoDeMouseSimulandoMovimentoHumano(int x1, int y1, int x2, int y2) throws InterruptedException {
+    private boolean fazerMovimentoDeMouseSimulandoMovimentoHumano(int x1, int y1, int x2, int y2) throws InterruptedException {
         int ctrlX1 = x1 + (x2 - x1) / 4 + (random.nextInt(160) - 80);
         int ctrlY1 = y1 + (y2 - y1) / 4 + (random.nextInt(160) - 80);
         int ctrlX2 = x1 + 3 * (x2 - x1) / 4 + (random.nextInt(160) - 80);
@@ -211,8 +198,19 @@ public class MouseMoveRunnable implements Runnable {
     private TipoAtividadeHumana verificaEProcessaAtividadeHumana() {
         TipoAtividadeHumana tipoAtividadeHumana = verificaAtividadeHumana();
         if (tipoAtividadeHumana.houveAtividadeHumana()) {
+            if (tipoAtividadeHumana == TipoAtividadeHumana.TECLADO) {
+                if (mouseMoveDto.isModoBotAtivo()) {
+                    log.info("-> Ação no TECLADO detectada!");
+                }
+            } else if (tipoAtividadeHumana == TipoAtividadeHumana.MOUSE) {
+                if (mouseMoveDto.isModoBotAtivo()) {
+                    log.info("-> Ação no MOUSE detectada!");
+                }
+            }
+
             if (mouseMoveDto.isModoBotAtivo()) {
                 log.info("Interrompendo o bot e reiniciando cronômetro.");
+                log.info("");
                 mouseMoveDto.setModoBotAtivo(false);
             }
 
@@ -232,19 +230,17 @@ public class MouseMoveRunnable implements Runnable {
 
         if (atividadeNoTeclado) {
             tipoAtividadeHumana = TipoAtividadeHumana.TECLADO;
-            if (mouseMoveDto.isModoBotAtivo()) {
-                log.info("-> Ação no teclado detectada!");
-            }
         } else if (atividadeNoMouse) {
             tipoAtividadeHumana = TipoAtividadeHumana.MOUSE;
-            if (mouseMoveDto.isModoBotAtivo()) {
-                log.info("-> Movimento humano no mouse detectado!");
-            }
         } else {
             tipoAtividadeHumana = TipoAtividadeHumana.NENHUM;
         }
 
         return tipoAtividadeHumana;
+    }
+
+    private boolean houveAtividadeNoTeclado() {
+        return keyboardActivityDetected.get();
     }
 
     public void notificarAtividadeNoTeclado() {
@@ -256,8 +252,17 @@ public class MouseMoveRunnable implements Runnable {
         }
     }
 
-    public boolean houveAtividadeNoTeclado() {
-        return keyboardActivityDetected.get();
+    public void stop() {
+        running.set(false);
+
+        Thread thread = workerThread;
+        if (thread != null) {
+            thread.interrupt();
+        }
+    }
+
+    public boolean isRunning() {
+        return running.get();
     }
 
 }

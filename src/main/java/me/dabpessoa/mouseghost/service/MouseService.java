@@ -49,9 +49,14 @@ public class MouseService implements MonitorListener {
         boolean started = mouseMonitor.startMonitor(tempoDeInatividadeValido, ignorarTeclado);
 
         if (started) {
+            String mensagemTracos = "------------------------------------------------------------------";
+            log.info(mensagemTracos);
             log.info("Monitor iniciado. O mouse se moverá após {} segundos sem interação.", tempoDeInatividadeValido);
-            log.info("Considerar atividade do teclado: {}", !ignorarTeclado);
+            log.info("A atividade no teclado {}está sendo monitorada.", ignorarTeclado ? "NÃO " : "");
+            log.info(mensagemTracos);
+            log.info("");
             log.info("[!] Para encerrar o monitoramento, clique no botão 'Parar', ou feche a janela principal.");
+            log.info("");
         }
 
         return started;
@@ -60,6 +65,7 @@ public class MouseService implements MonitorListener {
     public void stop() {
         mouseMonitor.stopMonitor();
         log.info("Monitor parado.");
+        log.info("");
     }
 
     public boolean isRunning() {

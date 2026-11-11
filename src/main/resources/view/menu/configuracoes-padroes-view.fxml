@@ -8,9 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="18.0" styleClass="settings-view" xmlns="http://javafx.com/javafx/25"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
+<VBox spacing="18.0" styleClass="settings-view" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.dabpessoa.mouseghost.view.controller.ConfiguracaoViewController">
     <padding>
         <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
     </padding>
@@ -19,38 +17,29 @@
             <children>
                 <Label styleClass="eyebrow" text="PREFERÊNCIAS" />
                 <Label styleClass="page-title" text="Configurações" />
-                <Label styleClass="page-subtitle"
-                       text="Defina quando o Mouse Ghost deve agir após a sua última interação." />
+                <Label styleClass="page-subtitle" text="Defina quando o Mouse Ghost deve agir após a sua última interação." />
             </children>
         </VBox>
 
         <VBox spacing="14.0" styleClass="settings-card" VBox.vgrow="ALWAYS">
             <children>
                 <Label styleClass="card-title" text="Tempo de ociosidade" />
-                <Label styleClass="card-description" wrapText="true"
-                       text="O cursor só será movimentado depois de permanecer parado pelo período informado." />
+                <Label styleClass="card-description" text="O cursor só será movimentado depois de permanecer parado pelo período informado." wrapText="true" />
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
-                        <TextField fx:id="tempoOciosidadeInput" onAction="#salvarAction"
-                                   promptText="Ex.: 120" prefWidth="150.0" />
+                        <TextField fx:id="tempoOciosidadeInput" onAction="#salvarAction" prefWidth="150.0" promptText="Ex.: 120" />
                         <Label styleClass="field-unit" text="segundos" />
                     </children>
                 </HBox>
-                <Label styleClass="field-hint"
-                       text="Use um valor entre 1 e 3600 segundos. Recomendado: abaixo do bloqueio automático da tela." />
-                <CheckBox fx:id="ignorarTecladoCheckBox" mnemonicParsing="false"
-                          styleClass="keyboard-option" text="Ignorar teclado" />
-                <Label styleClass="field-hint" wrapText="true"
-                       text="Desativado: digitar também reinicia o cronômetro. Ativado: somente o movimento do mouse será considerado." />
+                <Label styleClass="field-hint" text="Use um valor entre 1 e 3600 segundos. Recomendado: abaixo do bloqueio automático da tela." />
+                <CheckBox fx:id="ignorarTecladoCheckBox" mnemonicParsing="false" styleClass="keyboard-option" text="Ignorar teclado" />
+                <Label styleClass="field-hint" text="Desativado: digitar também reinicia o cronômetro. Ativado: somente o movimento do mouse será considerado." wrapText="true" />
                 <Label fx:id="validationMessage" wrapText="true" />
                 <HBox alignment="CENTER_RIGHT" spacing="10.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#restaurarPadraoAction"
-                                styleClass="secondary-button" text="Restaurar padrão" />
-                        <Button mnemonicParsing="false" onAction="#voltarInicioAction"
-                                styleClass="secondary-button" text="Voltar" />
-                        <Button mnemonicParsing="false" onAction="#salvarAction"
-                                styleClass="primary-button" text="Salvar" />
+                        <Button mnemonicParsing="false" onAction="#restaurarPadraoAction" styleClass="secondary-button" text="Restaurar padrão" />
+                        <Button mnemonicParsing="false" onAction="#voltarInicioAction" styleClass="secondary-button" text="Voltar para Tela Inicial" />
+                        <Button mnemonicParsing="false" onAction="#salvarAction" styleClass="primary-button" text="Salvar" />
                     </children>
                     <VBox.margin>
                         <Insets top="24.0" />

@@ -38,7 +38,7 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
             if (!GlobalScreen.isNativeHookRegistered()) {
                 GlobalScreen.registerNativeHook();
                 ownsNativeHook = true;
-                log.info("Hook global do teclado registrado.");
+                log.debug("Hook global do teclado registrado.");
             } else {
                 log.debug("Hook global do teclado já estava registrado.");
             }
@@ -49,7 +49,7 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
             if (!nativeKeyListenerRegistered) {
                 GlobalScreen.addNativeKeyListener(this);
                 nativeKeyListenerRegistered = true;
-                log.info("Listener global do teclado registrado.");
+                log.debug("Listener global do teclado registrado.");
             }
         } catch (NativeHookException | RuntimeException exception) {
             throw new IllegalStateException("Não foi possível iniciar a captura global do teclado.", exception);
@@ -88,9 +88,15 @@ public class NativeKeyboardMonitor implements KeyboardListener, NativeKeyListene
 
     @Override
     public void clearListeners() {
-        checkKeyboardListeners();
-        keyboardListeners.clear();
-        log.info("Listeners da sessão de teclado removidos.");
+        if (keyboardListeners != null) {
+            boolean possuiAlgoParaLimpar = !keyboardListeners.isEmpty();
+            keyboardListeners.clear();
+
+            if (possuiAlgoParaLimpar) {
+                log.debug("Listeners da sessão de teclado removidos.");
+            }
+        }
+
     }
 
     public void checkKeyboardListeners() {
