@@ -39,4 +39,5 @@ public class MouseMoveDto {
         tempoDeInatividade = Long.parseLong(SettingsFileUtils.PropertiesConfigEnum.OCIOSIDADE.getValorPadrao());
         modoBotAtivo = false;
     }
+
 }

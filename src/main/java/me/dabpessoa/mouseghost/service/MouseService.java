@@ -116,7 +116,7 @@ public class MouseService implements MonitorListener {
     }
 
     @Override
-    public void onMouseMove(MonitorSnapshot snapshot) {
+    public void houveAtividadeHumana(MonitorSnapshot snapshot) {
         if (atomicMonitorSnapshot == null) {
             atomicMonitorSnapshot = new AtomicReference<>(snapshot);
             return;

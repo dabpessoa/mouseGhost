@@ -77,35 +77,6 @@ public class MouseMoveRunnable implements Runnable {
         }
     }
 
-    private void criarSnapshotEAtualizaListeners(MouseMoveDto mouseMoveDto, TipoAtividadeHumana tipoAtividadeHumana) {
-        if (monitorListener == null) {
-            return;
-        }
-
-        long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
-
-        MonitorStatus status;
-        if (isRunning() && mouseMoveDto.isModoBotAtivo()) {
-            status = MonitorStatus.MOVING;
-        } else if (isRunning()) {
-            status = MonitorStatus.WAITING;
-        } else {
-            status = MonitorStatus.STOPPED;
-        }
-
-        MonitorSnapshot snapshot = new MonitorSnapshot(
-                tempoParado,
-                mouseMoveDto.getTempoUltimoMovimentoHumano(),
-                mouseMoveDto.getTempoDeInatividade(),
-                mouseMoveDto.getPosicaoAtualReal(),
-                mouseMoveDto.isModoBotAtivo(),
-                status,
-                tipoAtividadeHumana
-        );
-
-        monitorListener.onMouseMove(snapshot);
-    }
-
     private void verificaMovimentoOrganicoDoMouse() throws InterruptedException {
         long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
         long limiteMilissegundos = mouseMoveDto.getTempoDeInatividade() * 1000L;
@@ -235,6 +206,35 @@ public class MouseMoveRunnable implements Runnable {
         }
 
         return tipoAtividadeHumana;
+    }
+
+    private void criarSnapshotEAtualizaListeners(MouseMoveDto mouseMoveDto, TipoAtividadeHumana tipoAtividadeHumana) {
+        if (monitorListener == null) {
+            return;
+        }
+
+        long tempoParado = System.currentTimeMillis() - mouseMoveDto.getTempoUltimoMovimentoHumano();
+
+        MonitorStatus status;
+        if (isRunning() && mouseMoveDto.isModoBotAtivo()) {
+            status = MonitorStatus.MOVING;
+        } else if (isRunning()) {
+            status = MonitorStatus.WAITING;
+        } else {
+            status = MonitorStatus.STOPPED;
+        }
+
+        MonitorSnapshot snapshot = new MonitorSnapshot(
+                tempoParado,
+                mouseMoveDto.getTempoUltimoMovimentoHumano(),
+                mouseMoveDto.getTempoDeInatividade(),
+                mouseMoveDto.getPosicaoAtualReal(),
+                mouseMoveDto.isModoBotAtivo(),
+                status,
+                tipoAtividadeHumana
+        );
+
+        monitorListener.houveAtividadeHumana(snapshot);
     }
 
     private boolean houveAtividadeNoTeclado() {
